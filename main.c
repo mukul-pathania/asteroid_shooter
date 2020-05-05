@@ -1,3 +1,4 @@
+#include "asteroid.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro5.h>
@@ -30,7 +31,7 @@ int main()
     al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
     al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
 
-    ALLEGRO_DISPLAY* disp = al_create_display(640, 480);
+    ALLEGRO_DISPLAY* disp = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
     must_init(disp, "display");
 
     ALLEGRO_FONT* font = al_create_builtin_font();
@@ -49,10 +50,12 @@ int main()
 
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
-
-
+    
+    //an array to record keyboard state.
     bool key[ALLEGRO_KEY_MAX];
     memset(key, false, sizeof(key));
+
+    init_asteroids(); //initialise asteroids for use.
 
     al_start_timer(timer);
     while(1)
@@ -62,7 +65,8 @@ int main()
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
-                //game logic to be written here.
+                asteroid_trigger(); //create new asteroids.
+                update_asteroids(); //update all the asteroids on screen.
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
@@ -91,7 +95,8 @@ int main()
             al_translate_transform(&transform, 0, 0);
             al_use_transform(&transform);
 
-            al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Hello World.");
+            al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
+            draw_all_asteroids();
 
             al_flip_display();
 
