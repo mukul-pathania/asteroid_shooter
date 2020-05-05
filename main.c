@@ -1,4 +1,5 @@
 #include "asteroid.h"
+#include "input.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro5.h>
@@ -51,12 +52,9 @@ int main()
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
     
-    //an array to record keyboard state.
-    bool key[ALLEGRO_KEY_MAX];
-    memset(key, false, sizeof(key));
 
     init_asteroids(); //initialise asteroids for use.
-
+    init_input();  //To handle keyboard events
     al_start_timer(timer);
     while(1)
     {
@@ -85,6 +83,8 @@ int main()
                 done = true;
                 break;
         }
+        
+        keyboard_update(&event);
 
         if(done)
             break;
