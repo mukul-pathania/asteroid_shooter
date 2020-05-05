@@ -1,5 +1,6 @@
 #include "asteroid.h"
 #include "input.h"
+#include "blast.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro5.h>
@@ -57,6 +58,7 @@ int main()
     init_asteroids(); //initialise asteroids for use.
     init_input();  //To handle keyboard events
     init_ship();   //initialize ship
+    init_blasts(); //initialise blasts
     al_start_timer(timer);
     while(1)
     {
@@ -68,6 +70,8 @@ int main()
                 asteroid_trigger(); //create new asteroids.
                 update_asteroids(); //update all the asteroids on screen.
                 ship_update(ship); //update ship
+                blast_trigger(); //create blasts
+                update_blasts();  //update the blasts on the screen.
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
@@ -100,7 +104,8 @@ int main()
 
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_all_asteroids();
-            draw_ship(ship); // draws spaceship 
+            draw_ship(ship); // draws spaceship
+            draw_all_blasts(); //draws all the blasts
             al_flip_display();
 
             redraw = false;
