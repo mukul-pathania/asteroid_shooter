@@ -13,10 +13,10 @@ SPACESHIP *ship;
 ALLEGRO_TRANSFORM ship_transform;
 
 void init_ship(){
-    
+
     ship = (SPACESHIP*)malloc(sizeof(SPACESHIP));
-    
-    SPRITESHEET = al_load_bitmap("spritesheet.png");
+
+    SPRITESHEET = al_load_bitmap("resources/spritesheet.png");
     if(!SPRITESHEET){
         fprintf(stderr, "Couldn't load Spritesheet");
         exit(1);
@@ -38,14 +38,14 @@ void init_ship(){
 
 
 void draw_ship(SPACESHIP *ship){
-    al_build_transform(&ship_transform, ship->x, ship->y, ship->scale, 
+    al_build_transform(&ship_transform, ship->x, ship->y, ship->scale,
             ship->scale, ship->heading);
     al_use_transform(&ship_transform);
     al_draw_bitmap(SHIP, -12/2, -13/2, 0);
 }
 
 void ship_update(SPACESHIP *ship){
-    
+
     static float temp_heading;
 
     if(ship->speed > 0){
@@ -67,7 +67,7 @@ void ship_update(SPACESHIP *ship){
         else
             ship->speed = 0;
     }
-    
+
     if((!key[ALLEGRO_KEY_UP]) && (ship->speed > 0))
         ship->is_drifting = true;
     else
@@ -75,10 +75,10 @@ void ship_update(SPACESHIP *ship){
 
     if(!ship->is_drifting)
         temp_heading = ship->heading;
-    
-    if(key[ALLEGRO_KEY_LEFT]) 
+
+    if(key[ALLEGRO_KEY_LEFT])
         ship->heading -= MAX_TURN_RATE;
-    
+
     if(key[ALLEGRO_KEY_RIGHT])
        ship->heading += MAX_TURN_RATE;
 

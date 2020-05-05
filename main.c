@@ -51,10 +51,11 @@ int main()
 
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
-    
+
 
     init_asteroids(); //initialise asteroids for use.
     init_input();  //To handle keyboard events
+    init_ship();   //initialize ship
     al_start_timer(timer);
     while(1)
     {
@@ -65,6 +66,7 @@ int main()
             case ALLEGRO_EVENT_TIMER:
                 asteroid_trigger(); //create new asteroids.
                 update_asteroids(); //update all the asteroids on screen.
+                ship_update(ship); //update ship
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
@@ -83,7 +85,7 @@ int main()
                 done = true;
                 break;
         }
-        
+
         keyboard_update(&event);
 
         if(done)
@@ -97,7 +99,7 @@ int main()
 
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_all_asteroids();
-
+            draw_ship(ship); // draws spaceship 
             al_flip_display();
 
             redraw = false;
