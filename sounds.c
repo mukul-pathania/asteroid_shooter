@@ -29,22 +29,5 @@ void play_bsound(){
 }
 
 void play_tsound(){
-     al_play_sample(trail_sound, 1, 0,5, ALLEGRO_PLAYMODE_ONCE, NULL);
-}
-
-
-     
-
-
-
-
-
-
-6
-
-
-
-
-
-     
-     
+     al_play_sample(trail_sound, 0.5, 0,2, ALLEGRO_PLAYMODE_ONCE, NULL);
+}    
