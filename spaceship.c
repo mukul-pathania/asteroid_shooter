@@ -7,6 +7,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
+#include "sounds.h"
 
 ALLEGRO_BITMAP *SPRITESHEET, *SHIP;
 SPACESHIP *ship;
@@ -57,6 +58,7 @@ void ship_update(SPACESHIP *ship){
         if(ship->speed == 0)
             ship->speed = 1;
         ship->speed *= SPACESHIP_ACC_GRADIENT;
+        play_tsound();
     }
     if(ship->speed > MAX_SPACESHIP_SPEED)
         ship->speed = MAX_SPACESHIP_SPEED;
