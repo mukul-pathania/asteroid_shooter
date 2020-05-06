@@ -8,7 +8,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
 
-ALLEGRO_BITMAP *SPRITESHEET, *SHIP;
+ALLEGRO_BITMAP *SPRITESHEET, *SHIP ,*TRAIL ;
 SPACESHIP *ship;
 ALLEGRO_TRANSFORM ship_transform;
 
@@ -26,6 +26,12 @@ void init_ship(){
         fprintf(stderr, "Couldn't load Ship");
         exit(1);
     }
+    TRAIL = al_load_bitmap("resources/trail.png");
+    if(!TRAIL){
+      fprintf(stderr, "Couldn't load Trail");
+      exit(1);
+
+    }
     ship->x = (float)SCREEN_WIDTH / 2;
     ship->y = (float)SCREEN_HEIGHT / 2;
     ship->speed = 0;
@@ -42,7 +48,22 @@ void draw_ship(SPACESHIP *ship){
             ship->scale, ship->heading);
     al_use_transform(&ship_transform);
     al_draw_bitmap(SHIP, -12/2, -13/2, 0);
-}
+    if(key[ALLEGRO_KEY_UP]){
+     int r = rand() % 5;
+       if(r == 0)
+        al_draw_scaled_bitmap(TRAIL, 642, 45, 147, 160, -18/2, 13/2, 20, 20, 0);
+       if (r == 1)
+         al_draw_scaled_bitmap(TRAIL, 437, 60, 121, 138, -18/2, 13/2, 20, 20, 0);
+       if(r == 2)
+         al_draw_scaled_bitmap(TRAIL, 245, 106, 106, 85, -18/2, 13/2, 20, 20, 0);
+       if(r == 3)
+         al_draw_scaled_bitmap(TRAIL, 232, 232, 121, 124, -18/2, 13/2, 20, 20, 0);
+       if(r == 4)
+         al_draw_scaled_bitmap(TRAIL, 655, 222, 88, 70, -18/2, 13/2, 20, 20, 0);
+       }
+  }
+
+
 
 void ship_update(SPACESHIP *ship){
 
@@ -57,6 +78,7 @@ void ship_update(SPACESHIP *ship){
         if(ship->speed == 0)
             ship->speed = 1;
         ship->speed *= SPACESHIP_ACC_GRADIENT;
+        void ignite();
     }
     if(ship->speed > MAX_SPACESHIP_SPEED)
         ship->speed = MAX_SPACESHIP_SPEED;
