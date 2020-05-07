@@ -47,7 +47,8 @@ void draw_ship(SPACESHIP *ship){
 
 void ship_update(SPACESHIP *ship){
 
-    static float temp_heading;
+    static float temp_heading;// for producing the drifting effect.
+    static int sound_interval = 0; //for proper playing of rocket's trail sound.
 
     if(ship->speed > 0){
         ship->speed *= 0.95;
@@ -58,14 +59,25 @@ void ship_update(SPACESHIP *ship){
         if(ship->speed == 0)
             ship->speed = 1;
         ship->speed *= SPACESHIP_ACC_GRADIENT;
-        play_tsound();
+        if(sound_interval == 0){
+            play_tsound();//play the trail sound.
+            sound_interval = 100;
+        }
+        else
+            sound_interval--;
     }
+    //if the ship is not acclerating.
+    else{
+        sound_interval = 0;
+        al_stop_sample(&trail_id);
+    }
+
     if(ship->speed > MAX_SPACESHIP_SPEED)
         ship->speed = MAX_SPACESHIP_SPEED;
 
     if(key[ALLEGRO_KEY_DOWN]){
         if(ship->speed > 1)
-           ship->speed /= SPACESHIP_BRAKE_GRADIENT;
+            ship->speed /= SPACESHIP_BRAKE_GRADIENT;
         else
             ship->speed = 0;
     }
@@ -82,7 +94,7 @@ void ship_update(SPACESHIP *ship){
         ship->heading -= MAX_TURN_RATE;
 
     if(key[ALLEGRO_KEY_RIGHT])
-       ship->heading += MAX_TURN_RATE;
+        ship->heading += MAX_TURN_RATE;
 
 
     float dx, dy;
