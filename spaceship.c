@@ -8,9 +8,11 @@
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
 
-ALLEGRO_BITMAP *SPRITESHEET, *SHIP ,*TRAIL ;
+ALLEGRO_BITMAP *SPRITESHEET, *SHIP ,*TRAIL ,*TRAILS[5];
 SPACESHIP *ship;
 ALLEGRO_TRANSFORM ship_transform;
+extern ALLEGRO_DISPLAY *disp;
+extern void must_init(bool, const char *);
 
 void init_ship(){
 
@@ -32,6 +34,26 @@ void init_ship(){
       exit(1);
 
     }
+    for(int i = 0; i < 5; i++){
+        TRAILS[i] = al_create_bitmap(20, 20);
+        must_init(TRAILS[i], "TRAILS[]");
+    }
+    al_set_target_bitmap(TRAILS[0]);
+    al_draw_scaled_bitmap(TRAIL, 642, 45, 147, 160, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[1]);
+    al_draw_scaled_bitmap(TRAIL, 437, 60, 121, 138, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[2]);
+    al_draw_scaled_bitmap(TRAIL, 245, 106, 106, 85, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[3]);
+    al_draw_scaled_bitmap(TRAIL, 232, 232, 121, 124, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[4]);
+    al_draw_scaled_bitmap(TRAIL, 655, 222, 88, 70, 0, 0, 20, 20, 0);
+
+    al_set_target_bitmap(al_get_backbuffer(disp));
+
+
+
+
     ship->x = (float)SCREEN_WIDTH / 2;
     ship->y = (float)SCREEN_HEIGHT / 2;
     ship->speed = 0;
@@ -49,19 +71,9 @@ void draw_ship(SPACESHIP *ship){
     al_use_transform(&ship_transform);
     al_draw_bitmap(SHIP, -12/2, -13/2, 0);
     if(key[ALLEGRO_KEY_UP]){
-     int r = rand() % 5;
-       if(r == 0)
-        al_draw_scaled_bitmap(TRAIL, 642, 45, 147, 160, -18/2, 13/2, 20, 20, 0);
-       if (r == 1)
-         al_draw_scaled_bitmap(TRAIL, 437, 60, 121, 138, -18/2, 13/2, 20, 20, 0);
-       if(r == 2)
-         al_draw_scaled_bitmap(TRAIL, 245, 106, 106, 85, -18/2, 13/2, 20, 20, 0);
-       if(r == 3)
-         al_draw_scaled_bitmap(TRAIL, 232, 232, 121, 124, -18/2, 13/2, 20, 20, 0);
-       if(r == 4)
-         al_draw_scaled_bitmap(TRAIL, 655, 222, 88, 70, -18/2, 13/2, 20, 20, 0);
-       }
+    al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
   }
+}
 
 
 

@@ -3,7 +3,7 @@
 #define SPACESHIP_ACC_GRADIENT 1.2
 #define MAX_TURN_RATE DEG_TO_RAD(6)
 
-extern ALLEGRO_BITMAP *SPRITESHEET, *SHIP, *TRAIL;
+extern ALLEGRO_BITMAP *SPRITESHEET, *SHIP, *TRAIL, *TRAILS[5];
 
 typedef struct{
     float x, y, speed, heading, scale;
