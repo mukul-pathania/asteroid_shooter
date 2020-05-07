@@ -8,6 +8,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include "spaceship.h"
+#include "sounds.h"
 
 void must_init(bool test, const char *description)
 {
@@ -41,6 +42,7 @@ int main()
 
     must_init(al_init_primitives_addon(), "primitives");
     must_init(al_init_image_addon(), "image-addon");
+    audio_init();
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(disp));
     al_register_event_source(queue, al_get_timer_event_source(timer));
@@ -115,6 +117,7 @@ int main()
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
+    audio_deinit();
 
     return 0;
 }

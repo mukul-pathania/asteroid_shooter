@@ -5,6 +5,7 @@
 #include "input.h"
 #include "asteroid.h"
 #include <math.h>
+#include "sounds.h"
 
 int blasts_on_screen = 0;
 BLAST blasts[MAX_BLASTS_ON_SCREEN];
@@ -40,6 +41,7 @@ void blast_trigger(){
     if((key[ALLEGRO_KEY_SPACE]))
         if((blasts_on_screen < MAX_BLASTS_ON_SCREEN) && (blast_interval == 0)){ 
         create_new_blast();
+        play_bsound();
         blast_interval = FRAME_INTERVAL_BETWEEN_BLASTS;
         }
     if(blast_interval > 0)
