@@ -9,9 +9,11 @@
 #include <math.h>
 #include "sounds.h"
 
-ALLEGRO_BITMAP *SPRITESHEET, *SHIP;
+ALLEGRO_BITMAP *SPRITESHEET, *SHIP ,*TRAIL ,*TRAILS[5];
 SPACESHIP *ship;
 ALLEGRO_TRANSFORM ship_transform;
+extern ALLEGRO_DISPLAY *disp;
+extern void must_init(bool, const char *);
 
 void init_ship(){
 
@@ -27,6 +29,32 @@ void init_ship(){
         fprintf(stderr, "Couldn't load Ship");
         exit(1);
     }
+    TRAIL = al_load_bitmap("resources/trail.png");
+    if(!TRAIL){
+      fprintf(stderr, "Couldn't load Trail");
+      exit(1);
+
+    }
+    for(int i = 0; i < 5; i++){
+        TRAILS[i] = al_create_bitmap(20, 20);
+        must_init(TRAILS[i], "TRAILS[]");
+    }
+    al_set_target_bitmap(TRAILS[0]);
+    al_draw_scaled_bitmap(TRAIL, 642, 45, 147, 160, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[1]);
+    al_draw_scaled_bitmap(TRAIL, 437, 60, 121, 138, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[2]);
+    al_draw_scaled_bitmap(TRAIL, 245, 106, 106, 85, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[3]);
+    al_draw_scaled_bitmap(TRAIL, 232, 232, 121, 124, 0, 0, 20, 20, 0);
+    al_set_target_bitmap(TRAILS[4]);
+    al_draw_scaled_bitmap(TRAIL, 655, 222, 88, 70, 0, 0, 20, 20, 0);
+
+    al_set_target_bitmap(al_get_backbuffer(disp));
+
+
+
+
     ship->x = (float)SCREEN_WIDTH / 2;
     ship->y = (float)SCREEN_HEIGHT / 2;
     ship->speed = 0;
@@ -43,7 +71,12 @@ void draw_ship(SPACESHIP *ship){
             ship->scale, ship->heading);
     al_use_transform(&ship_transform);
     al_draw_bitmap(SHIP, -12/2, -13/2, 0);
+    if(key[ALLEGRO_KEY_UP]){
+    al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
+  }
 }
+
+
 
 void ship_update(SPACESHIP *ship){
 
