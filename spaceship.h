@@ -13,6 +13,6 @@ typedef struct{
 extern SPACESHIP *ship;
 extern ALLEGRO_TRANSFORM ship_transform;
 void init_ship();
-
+void deinit_ship();
 void draw_ship(SPACESHIP *ship);
 void ship_update(SPACESHIP *ship);

@@ -118,6 +118,6 @@ int main()
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     audio_deinit();
-
+    deinit_ship();
     return 0;
 }
