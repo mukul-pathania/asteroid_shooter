@@ -4,6 +4,7 @@
 
 extern ALLEGRO_SAMPLE* blast_sound;
 extern ALLEGRO_SAMPLE* trail_sound;
+extern ALLEGRO_SAMPLE_ID trail_id;
 
 void must_init(bool test, const char *description);
 
