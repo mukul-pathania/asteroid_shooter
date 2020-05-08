@@ -13,6 +13,7 @@
 typedef struct{
     float x, y, heading, twist, speed, rot_velocity, scale;
     bool gone;
+    int life;
     ALLEGRO_COLOR color;
     BOUNDING_CIRCLE circle;
 }ASTEROID;
