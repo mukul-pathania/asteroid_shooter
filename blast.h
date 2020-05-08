@@ -1,3 +1,4 @@
+#include "collision.h"
 #define MAX_BLASTS_ON_SCREEN 40
 #define FRAME_INTERVAL_BETWEEN_BLASTS 4
 #define BLAST_LENGTH 6
@@ -7,6 +8,7 @@ extern int blasts_on_screen;
 typedef struct{
     float x, y, heading, speed, scale;
     bool gone;
+    BOUNDING_CIRCLE circle;
     ALLEGRO_COLOR color;
 }BLAST;
 
