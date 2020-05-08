@@ -7,6 +7,6 @@ typedef struct{
 }BOUNDING_CIRCLE;
 
 bool is_colliding(BOUNDING_CIRCLE* circle1, BOUNDING_CIRCLE* circle2);
-bool check_collision();
+bool check_and_handle_collisions();
 
 #endif
