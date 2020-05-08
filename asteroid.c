@@ -40,6 +40,9 @@ static void create_asteroid(ASTEROID* asteroid){
     asteroid->rot_velocity *= RAND_DOUBLE_RANGE(0, DEG_TO_RAD(15));
     asteroid->scale = FLIP_COIN(1,2);
     asteroid->color = (rand() % 2) ? (al_map_rgb(255, 0 ,0)) : (al_map_rgb(0 ,255, 0));
+    asteroid->circle.x = asteroid->x;
+    asteroid->circle.y = asteroid->y;
+    asteroid->circle.radius = 24*asteroid->scale;
     asteroid->gone = false;
     asteroid_count++;
 }
@@ -70,8 +73,9 @@ void update_asteroids(){
             continue;
         dx = sin(asteroids[i].heading) * asteroids[i].speed;
         dy = cos(asteroids[i].heading) * asteroids[i].speed;
-        asteroids[i].x += dx;
-        asteroids[i].y += dy;
+        asteroids[i].circle.x = (asteroids[i].x += dx);
+        asteroids[i].circle.y = (asteroids[i].y += dy);
+    
         asteroids[i].twist += asteroids[i].rot_velocity;
 
         //check if the asteroid is on the screen, if it goes out of bounds then 
