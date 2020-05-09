@@ -59,7 +59,7 @@ void init_ship(){
     ship->y = (float)SCREEN_HEIGHT / 2;
     ship->speed = 0;
     ship->heading = 0;
-    ship->scale = 3;
+    ship->scale = 2;
     ship->is_drifting = false;
 
 
