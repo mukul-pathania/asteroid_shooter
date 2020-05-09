@@ -1,4 +1,4 @@
-#include "asteroid.h"
+
 #include "input.h"
 #include "blast.h"
 #include <stdio.h>
@@ -9,6 +9,8 @@
 #include <allegro5/allegro_primitives.h>
 #include "spaceship.h"
 #include "sounds.h"
+#include "bgspace.h"
+
 
 void must_init(bool test, const char *description)
 {
@@ -60,6 +62,8 @@ int main()
     init_input();  //To handle keyboard events
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
+    init_star();
+  
     al_start_timer(timer);
     while(1)
     {
@@ -68,11 +72,13 @@ int main()
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
+                star_update();
                 asteroid_trigger(); //create new asteroids.
                 update_asteroids(); //update all the asteroids on screen.
                 ship_update(ship); //update ship
                 blast_trigger(); //create blasts
                 update_blasts();  //update the blasts on the screen.
+                
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
@@ -102,7 +108,8 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_translate_transform(&transform, 0, 0);
             al_use_transform(&transform);
-
+            
+            star_create();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_all_asteroids();
             draw_ship(ship); // draws spaceship
@@ -112,12 +119,13 @@ int main()
             redraw = false;
         }
     }
-
+    
     al_destroy_font(font);
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     audio_deinit();
     deinit_ship();
+    
     return 0;
 }
