@@ -17,14 +17,15 @@ void init_blasts(){
 }
 
 void create_blast(BLAST *blast){
-    blast->x = ship->x ;
-    blast->y = ship->y ;
+    blast->x = blast->circle.x = ship->x ;
+    blast->y = blast->circle.y = ship->y ;
     blast->heading = ship->heading;
     //blast->speed = (ship->speed) ? (ship->speed * 2) : (5);
     blast->speed = (BLAST_SPEED > ship->speed * 2) ? (BLAST_SPEED) : (ship->speed * 2);
     blast->scale = 1;
     blast->gone = false;
     blast->color = al_map_rgb(255, 255, 255);
+    blast->circle.radius = BLAST_LENGTH;
     blasts_on_screen++;
 }
 
@@ -57,8 +58,8 @@ void update_blasts(){
 
         dx = sin(blasts[i].heading) * blasts[i].speed;
         dy = -cos(blasts[i].heading) * blasts[i].speed;
-        blasts[i].y += dy;
-        blasts[i].x += dx;
+        blasts[i].circle.y = (blasts[i].y += dy);
+        blasts[i].circle.x = (blasts[i].x += dx);
 
         if(blasts[i].x < 0 || blasts[i].x > SCREEN_WIDTH || 
                 blasts[i].y < 0 || blasts[i].y > SCREEN_HEIGHT){
@@ -71,7 +72,7 @@ void update_blasts(){
 void draw_blast(BLAST* blast){
     al_build_transform(&blast_transform, blast->x, blast->y, blast->scale, blast->scale, blast->heading);
     al_use_transform(&blast_transform);
-	al_draw_line(0, 0, 0, -BLAST_LENGTH, blast->color, BLAST_WIDTH);
+	al_draw_line(0, BLAST_LENGTH / 2, 0, -BLAST_LENGTH / 2, blast->color, BLAST_WIDTH);
 }
 
 void draw_all_blasts(){

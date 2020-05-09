@@ -10,7 +10,7 @@
 #include "spaceship.h"
 #include "sounds.h"
 #include "bgspace.h"
-
+#include <time.h>
 
 void must_init(bool test, const char *description)
 {
@@ -23,6 +23,7 @@ ALLEGRO_DISPLAY* disp;
 
 int main()
 {
+    srandom(time(0));
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
     must_init(al_install_mouse(),"mouse");
@@ -73,6 +74,7 @@ int main()
         {
             case ALLEGRO_EVENT_TIMER:
                 star_update();
+                check_and_handle_collisions();//check for collision between and blasts and asteroids and handle them if any.
                 asteroid_trigger(); //create new asteroids.
                 update_asteroids(); //update all the asteroids on screen.
                 ship_update(ship); //update ship

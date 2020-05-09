@@ -1,5 +1,5 @@
 #include <allegro5/allegro5.h>
-
+#include "collision.h"
 #define DEG_TO_RAD(x) ((float) (x)*ALLEGRO_PI/180)
 #define FLIP_COIN(x, y) (( rand() % 2) ? (x) : (y))
 #define RAND_DOUBLE_RANGE(min, max) ((float)rand() / (float) (RAND_MAX / (max - min)) + min)
@@ -13,7 +13,9 @@
 typedef struct{
     float x, y, heading, twist, speed, rot_velocity, scale;
     bool gone;
+    int life;
     ALLEGRO_COLOR color;
+    BOUNDING_CIRCLE circle;
 }ASTEROID;
 
 extern ALLEGRO_TRANSFORM asteroid_transform;
