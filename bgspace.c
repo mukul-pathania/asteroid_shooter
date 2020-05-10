@@ -9,7 +9,7 @@ void init_star(){
     for(int i=0; i < STAR_COUNT ; i++, x += 2){
         stars[i].x = x;
         stars[i].y = rand() % SCREEN_HEIGHT ;
-        stars[i].speed = RAND_DOUBLE_RANGE(0.1, 1.5);
+        stars[i].speed = RAND_DOUBLE_RANGE(0.1, 1);
     }
 }
 
