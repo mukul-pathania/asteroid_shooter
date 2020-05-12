@@ -24,39 +24,39 @@ void effect_init(){
         exit(1);
     }
     for(int i = 0; i < EXPLOSION_FRAMES; i++){
-        EXPLOSION[i] = al_create_bitmap(40, 40);
+        EXPLOSION[i] = al_create_bitmap(80, 80);
         must_init(EXPLOSION[i], "EXPLOSION[]");
     }
     for(int i = 0; i < SPARKS_FRAMES; i++){
-        SPARK[i] = al_create_bitmap(20, 20);
+        SPARK[i] = al_create_bitmap(50, 50);
         must_init(SPARK[i], "SPARK[]");
     }
 
     al_set_target_bitmap(EXPLOSION[0]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 12, 35, 35, 35, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 0, 135, 54, 45, 0, 0, 80, 80, 0);
     al_set_target_bitmap(EXPLOSION[1]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 70, 28, 31, 45, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 129, 72, 52, 50, 0, 0, 80, 80, 0);
     al_set_target_bitmap(EXPLOSION[2]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 129, 23, 55, 55, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 67, 72, 56, 50, 0, 0, 80, 80, 0);
     al_set_target_bitmap(EXPLOSION[3]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 196, 22, 56, 56, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 0, 70, 55, 50, 0, 0, 80, 80, 0);
     al_set_target_bitmap(EXPLOSION[4]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 2, 105, 53, 50, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 128, 3, 56, 54, 0, 0, 80, 80, 0);
     al_set_target_bitmap(EXPLOSION[5]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 68, 103, 50, 50, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 0, 0, 54, 56, 0, 0, 80, 80, 0);
     al_set_target_bitmap(EXPLOSION[6]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 135, 108, 45, 45, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 0, 135, 54, 45, 0, 0, 80, 80, 0);
     al_set_target_bitmap(EXPLOSION[7]);
-    al_draw_scaled_bitmap(EXPLOSION_IMG , 106, 112, 40, 40, 0, 0, 40, 40, 0);
+    al_draw_scaled_bitmap(EXPLOSION_IMG , 130, 135, 52, 50, 0, 0, 80, 80, 0);
 
     al_set_target_bitmap(SPARK[0]);
-    al_draw_scaled_bitmap(SPARK_IMG, 25, 25, 25, 25, 0, 0, 20 ,20, 0);
+    al_draw_scaled_bitmap(SPARK_IMG, 25, 25, 25, 25, 0, 0, 50 ,50, 0);
     al_set_target_bitmap(SPARK[1]);
-    al_draw_scaled_bitmap(SPARK_IMG, 130, 43, 43, 35, 0, 0, 20 ,20, 0);
+    al_draw_scaled_bitmap(SPARK_IMG, 130, 43, 43, 35, 0, 0, 50 ,50, 0);
     al_set_target_bitmap(SPARK[2]);
-    al_draw_scaled_bitmap(SPARK_IMG, 254, 31, 71, 65, 0, 0, 20 ,20, 0);
+    al_draw_scaled_bitmap(SPARK_IMG, 254, 31, 71, 65, 0, 0, 50 ,50, 0);
     al_set_target_bitmap(SPARK[3]);
-    al_draw_scaled_bitmap(SPARK_IMG, 24, 135, 90, 95, 0, 0, 20 ,20, 0);
+    al_draw_scaled_bitmap(SPARK_IMG, 24, 135, 90, 95, 0, 0, 50 ,50, 0);
 
     al_set_target_bitmap(al_get_backbuffer(disp));
 
