@@ -1,4 +1,4 @@
-
+#include "blast_effect.h"
 #include "input.h"
 #include "blast.h"
 #include <stdio.h>
@@ -64,7 +64,8 @@ int main()
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
     init_star();
-  
+    effect_init();
+
     al_start_timer(timer);
     while(1)
     {
@@ -80,7 +81,8 @@ int main()
                 ship_update(ship); //update ship
                 blast_trigger(); //create blasts
                 update_blasts();  //update the blasts on the screen.
-                
+                effect_update();
+
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
@@ -110,8 +112,9 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_translate_transform(&transform, 0, 0);
             al_use_transform(&transform);
-            
+
             star_create();
+            effect_draw();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_all_asteroids();
             draw_ship(ship); // draws spaceship
@@ -121,13 +124,13 @@ int main()
             redraw = false;
         }
     }
-    
+
     al_destroy_font(font);
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     audio_deinit();
     deinit_ship();
-    
+
     return 0;
 }

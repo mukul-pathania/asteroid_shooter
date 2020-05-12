@@ -5,6 +5,7 @@
 #include<allegro5/allegro_primitives.h>
 #include<math.h>
 #include"asteroid.h"
+#include "blast_effect.h"
 
 ALLEGRO_TRANSFORM asteroid_transform;
 int asteroid_count = 0;   //Asteroids that are active on screen.
@@ -17,10 +18,10 @@ void init_asteroids(){
 }
 
 
-/*This function creates an asteroid outside the screen and gives the asteroid 
- *it's properties like speed, rotation, direction etc randomly 
+/*This function creates an asteroid outside the screen and gives the asteroid
+ *it's properties like speed, rotation, direction etc randomly
  *and increments the asteroid_count variable.
- *This function is invisible to outside world, they can use it only through 
+ *This function is invisible to outside world, they can use it only through
  the asteroid_trigger function declared below.*/
 static void create_asteroid(ASTEROID* asteroid){
     int x = FLIP_COIN(1, -1);
@@ -48,10 +49,10 @@ static void create_asteroid(ASTEROID* asteroid){
     asteroid_count++;
 }
 
-/*This function searches for an empty place in the asteroids array for the 
- *creation of an asteroid and passes it to the create asteroid function 
+/*This function searches for an empty place in the asteroids array for the
+ *creation of an asteroid and passes it to the create asteroid function
  *declared above.
- *This function also cannot be used directly but through asteroid_trigger 
+ *This function also cannot be used directly but through asteroid_trigger
  *function declared below.
  *It does nothing if all the elements the in asteroids are are in use.*/
 
@@ -65,7 +66,7 @@ static void create_new_asteroid(){
 }
 
 
-/*This function updates all the asteroids in the asteroids array with their 
+/*This function updates all the asteroids in the asteroids array with their
  *corresponding speed, rotation etc , i.e. make them move across the screen.*/
 void update_asteroids(){
     float dx, dy;
@@ -76,15 +77,15 @@ void update_asteroids(){
         dy = cos(asteroids[i].heading) * asteroids[i].speed;
         asteroids[i].circle.x = (asteroids[i].x += dx);
         asteroids[i].circle.y = (asteroids[i].y += dy);
-    
+
         asteroids[i].twist += asteroids[i].rot_velocity;
 
-        //check if the asteroid is on the screen, if it goes out of bounds then 
+        //check if the asteroid is on the screen, if it goes out of bounds then
         //make the asteroid inactive and decrease the asteroid_count variable.
-        if(asteroids[i].x < -50 || asteroids[i].x > SCREEN_WIDTH + 50 
+        if(asteroids[i].x < -50 || asteroids[i].x > SCREEN_WIDTH + 50
                 || asteroids[i].y < -50|| asteroids[i].y > SCREEN_HEIGHT + 50
                 || asteroids[i].life == 0){
-            
+
             asteroid_count--;
             asteroids[i].gone = true;
         }
@@ -120,7 +121,7 @@ void draw_all_asteroids(){
  *SPAWN_RATE is declared in the asteroid.h header.*/
 void asteroid_trigger(){
     int i = rand() % SPAWN_RATE;
-    //create a new asteroid only if i is 0 and number of asteroids currently on 
+    //create a new asteroid only if i is 0 and number of asteroids currently on
     //screen is less than max allowed asteroids on screen.
     if(i == 0 && asteroid_count < MAX_ASTEROID_COUNT)
         create_new_asteroid();

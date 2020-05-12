@@ -2,6 +2,7 @@
 #include "collision.h"
 #include "asteroid.h"
 #include "blast.h"
+#include "blast_effect.h"
 #include <math.h>
 #include <allegro5/allegro5.h>
 
@@ -25,6 +26,10 @@ bool check_and_handle_collisions(){
                 continue;
             if(is_colliding(&blasts[i].circle, &asteroids[j].circle)){
                 asteroids[j].life--;
+                if(asteroids[j].life)
+                    effect_add(true, blasts[i].x, blasts[i].y);
+                else
+                    effect_add(false, asteroids[j].x, asteroids[j].y);
                 blasts[i].gone = true;
                 blasts_on_screen--;
                 return true;
@@ -33,7 +38,3 @@ bool check_and_handle_collisions(){
     }
     return false;
 }
-                
-            
-            
-

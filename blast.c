@@ -6,6 +6,7 @@
 #include "asteroid.h"
 #include <math.h>
 #include "sounds.h"
+#include "blast_effect.h"
 
 int blasts_on_screen = 0;
 BLAST blasts[MAX_BLASTS_ON_SCREEN];
@@ -40,7 +41,7 @@ void create_new_blast(){
 void blast_trigger(){
     static int blast_interval = 0;
     if((key[ALLEGRO_KEY_SPACE]))
-        if((blasts_on_screen < MAX_BLASTS_ON_SCREEN) && (blast_interval == 0)){ 
+        if((blasts_on_screen < MAX_BLASTS_ON_SCREEN) && (blast_interval == 0)){
         create_new_blast();
         play_bsound();
         blast_interval = FRAME_INTERVAL_BETWEEN_BLASTS;
@@ -61,7 +62,7 @@ void update_blasts(){
         blasts[i].circle.y = (blasts[i].y += dy);
         blasts[i].circle.x = (blasts[i].x += dx);
 
-        if(blasts[i].x < 0 || blasts[i].x > SCREEN_WIDTH || 
+        if(blasts[i].x < 0 || blasts[i].x > SCREEN_WIDTH ||
                 blasts[i].y < 0 || blasts[i].y > SCREEN_HEIGHT){
             blasts[i].gone = true;
             blasts_on_screen--;
@@ -77,11 +78,10 @@ void draw_blast(BLAST* blast){
 
 void draw_all_blasts(){
     for(int i = 0; i < MAX_BLASTS_ON_SCREEN; i++){
-        
+
         if(blasts[i].gone)
             continue;
 
         draw_blast(&blasts[i]);
     }
 }
-
