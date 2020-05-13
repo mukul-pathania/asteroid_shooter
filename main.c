@@ -11,6 +11,7 @@
 #include "sounds.h"
 #include "bgspace.h"
 #include <time.h>
+#include "planets.h"
 
 void must_init(bool test, const char *description)
 {
@@ -23,6 +24,7 @@ ALLEGRO_DISPLAY* disp;
 
 int main()
 {
+    
     srandom(time(0));
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
@@ -54,7 +56,7 @@ int main()
     bool redraw = true;
     ALLEGRO_EVENT event;
 
-
+    
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
 
@@ -65,7 +67,8 @@ int main()
     init_blasts(); //initialise blasts
     init_star();
     effect_init();
-
+    init_planet();
+    
     al_start_timer(timer);
     while(1)
     {
@@ -82,6 +85,8 @@ int main()
                 blast_trigger(); //create blasts
                 update_blasts();  //update the blasts on the screen.
                 effect_update();
+                trigger_comet();
+                update_comet();
 
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
@@ -112,7 +117,8 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_translate_transform(&transform, 0, 0);
             al_use_transform(&transform);
-
+            draw_comets();
+            draw_planet();
             star_create();
             effect_draw();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
@@ -131,6 +137,6 @@ int main()
     al_destroy_event_queue(queue);
     audio_deinit();
     deinit_ship();
-
+    destroy_planet();
     return 0;
 }
