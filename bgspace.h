@@ -1,11 +1,10 @@
 #include <allegro5/allegro5.h>
 #include "asteroid.h"
 
-#define STAR_COUNT SCREEN_WIDTH/3
+#define STAR_COUNT SCREEN_WIDTH / 2
 
 typedef struct{
      float x,y;
-     float dy;
      float speed;
 }STAR;
 

@@ -18,23 +18,14 @@ extern void must_init(bool, const char *);
 void init_ship(){
 
     ship = (SPACESHIP*)malloc(sizeof(SPACESHIP));
+    must_init(ship, "ship struct");
 
     SPRITESHEET = al_load_bitmap("resources/spritesheet.png");
-    if(!SPRITESHEET){
-        fprintf(stderr, "Couldn't load Spritesheet");
-        exit(1);
-    }
+    must_init(SPRITESHEET, "spritesheet");
     SHIP = al_create_sub_bitmap(SPRITESHEET, 0, 0, 12, 13);
-    if(!SHIP){
-        fprintf(stderr, "Couldn't load Ship");
-        exit(1);
-    }
+    must_init(SHIP, "ship bitmap");
     TRAIL = al_load_bitmap("resources/trail.png");
-    if(!TRAIL){
-      fprintf(stderr, "Couldn't load Trail");
-      exit(1);
-
-    }
+    must_init(TRAIL, "trail bitmap");
     for(int i = 0; i < 5; i++){
         TRAILS[i] = al_create_bitmap(20, 20);
         must_init(TRAILS[i], "TRAILS[]");
@@ -72,19 +63,19 @@ void draw_ship(SPACESHIP *ship){
     al_use_transform(&ship_transform);
     al_draw_bitmap(SHIP, -12/2, -13/2, 0);
     if(key[ALLEGRO_KEY_UP]){
-    al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
-  }
+        al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
+    }
 }
 
 void deinit_ship(){
-  al_destroy_bitmap(SPRITESHEET);
-  al_destroy_bitmap(SHIP);
-  al_destroy_bitmap(TRAIL);
-  al_destroy_bitmap(TRAILS[0]);
-  al_destroy_bitmap(TRAILS[1]);
-  al_destroy_bitmap(TRAILS[2]);
-  al_destroy_bitmap(TRAILS[3]);
-  al_destroy_bitmap(TRAILS[4]);
+    al_destroy_bitmap(SPRITESHEET);
+    al_destroy_bitmap(SHIP);
+    al_destroy_bitmap(TRAIL);
+    al_destroy_bitmap(TRAILS[0]);
+    al_destroy_bitmap(TRAILS[1]);
+    al_destroy_bitmap(TRAILS[2]);
+    al_destroy_bitmap(TRAILS[3]);
+    al_destroy_bitmap(TRAILS[4]);
 }
 
 void ship_update(SPACESHIP *ship){

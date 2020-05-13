@@ -10,12 +10,46 @@
 ALLEGRO_TRANSFORM asteroid_transform;
 int asteroid_count = 0;   //Asteroids that are active on screen.
 ASTEROID asteroids[MAX_ASTEROID_COUNT];
+ALLEGRO_BITMAP *asteroid_sprite[2], *asteroid[2];
+
+void must_init(bool, const char *);
+extern ALLEGRO_DISPLAY *disp;
 
 /* Set everything up for using the array of asteroids.*/
 void init_asteroids(){
     for(int i = 0; i < MAX_ASTEROID_COUNT; i++)
         asteroids[i].gone = true;
+
+    asteroid_sprite[0] = al_load_bitmap("resources/asteroid.png"); //load the first type of asteroid.
+    must_init(asteroid_sprite[0], "asteroid_sprite[0]");
+    asteroid_sprite[1] = al_load_bitmap("resources/asteroid2.png"); //load the second type of asteroid.
+    must_init(asteroid_sprite[1], "asteroid_sprite[1]");
+    /*We are going to redraw the asteroids on a 40-40 bitmap because we want 
+     *them to be only that large and then use that bitmap. We are doing this 
+     *because according to our understanding this approach is going to be 
+     *better than drawing a scaled bitmap every frame 
+     */
+    asteroid[0] = al_create_bitmap(40, 40);
+    must_init(asteroid[0], "asteroid");
+    asteroid[1] = al_create_bitmap(40, 40);
+    must_init(asteroid[1], "asteroid[1]");
+    al_set_target_bitmap(asteroid[0]);
+    al_draw_scaled_bitmap(asteroid_sprite[0], 0, 0, 400, 382, 0, 0, 40, 40, 0);
+    al_set_target_bitmap(asteroid[1]);
+    al_draw_scaled_bitmap(asteroid_sprite[1], 0, 0, 279, 277, 0, 0, 40, 40, 0);
+    al_set_target_bitmap(al_get_backbuffer(disp)); //return to screen for drawing stuff
+
 }
+
+/*Destroy everything that was created in init_asteroids()*/
+void deinit_asteroids(){
+    al_destroy_bitmap(asteroid_sprite[0]);
+    al_destroy_bitmap(asteroid_sprite[1]);
+    al_destroy_bitmap(asteroid[0]);
+    al_destroy_bitmap(asteroid[1]);
+}
+
+
 
 
 /*This function creates an asteroid outside the screen and gives the asteroid
@@ -30,7 +64,7 @@ static void create_asteroid(ASTEROID* asteroid){
         asteroid->heading = RAND_DOUBLE_RANGE(DEG_TO_RAD(45), DEG_TO_RAD(135));
     }
     else{
-        asteroid->x = SCREEN_WIDTH +20;
+        asteroid->x = SCREEN_WIDTH + 20;
         asteroid->heading = RAND_DOUBLE_RANGE(DEG_TO_RAD(-45), DEG_TO_RAD(-135));
     }
     asteroid->y = RAND_DOUBLE_RANGE(0, SCREEN_HEIGHT);
@@ -40,10 +74,12 @@ static void create_asteroid(ASTEROID* asteroid){
     asteroid->rot_velocity = FLIP_COIN(0.5, -0.5);
     asteroid->rot_velocity *= RAND_DOUBLE_RANGE(0, DEG_TO_RAD(15));
     asteroid->scale = FLIP_COIN(1,2);
+    asteroid->type = FLIP_COIN(ROCKY, STONEY); //which type of asteroid to draw.
     asteroid->color = (rand() % 2) ? (al_map_rgb(255, 0 ,0)) : (al_map_rgb(0 ,255, 0));
     asteroid->circle.x = asteroid->x;
     asteroid->circle.y = asteroid->y;
-    asteroid->circle.radius = 24*asteroid->scale;
+    asteroid->circle.radius = 20 * asteroid->scale; 
+    //radius of the circle(collsion detection) depends on the scale as we are drawing scaled bitmaps.
     asteroid->life = 2 * asteroid->scale;
     asteroid->gone = false;
     asteroid_count++;
@@ -97,18 +133,16 @@ void update_asteroids(){
 static void draw_asteroid(ASTEROID *a){
     al_build_transform(&asteroid_transform, a->x, a->y, a->scale, a->scale, a->twist);
     al_use_transform(&asteroid_transform);
-	al_draw_line(-20, 20, -25, 5, a->color, 2.0f);
-	al_draw_line(-25, 5, -25, -10, a->color, 2.0f);
-	al_draw_line(-25, -10, -5, -10, a->color, 2.0f);
-	al_draw_line(-5, -10, -10, -20, a->color, 2.0f);
-	al_draw_line(-10, -20, 5, -20, a->color, 2.0f);
-	al_draw_line(5, -20, 20, -10, a->color, 2.0f);
-	al_draw_line(20, -10, 20, -5, a->color, 2.0f);
-	al_draw_line(20, -5, 0, 0, a->color, 2.0f);
-	al_draw_line(0, 0, 20, 10, a->color, 2.0f);
-	al_draw_line(20, 10, 10, 20, a->color, 2.0f);
-	al_draw_line(10, 20, 0, 15, a->color, 2.0f);
-	al_draw_line(0, 15, -20, 20, a->color, 2.0f);
+    al_draw_bitmap(asteroid[a->type], -20, -20, 0); //a->type tells which bitmap to use
+
+
+    //Following code is used to visualise the bounding circles(collsion detection) of the asteroids.
+    /*al_build_transform(&asteroid_transform, a->circle.x, a->circle.y, 1, 1, a->twist);
+    al_use_transform(&asteroid_transform);
+    al_draw_circle(0, 0, a->circle.radius, al_map_rgb(255, 0, 0), 3.0f);
+    */
+
+
 }
 /*This function loops through the asteroids array and draws all the active asteroids to the screen*/
 void draw_all_asteroids(){

@@ -4,12 +4,12 @@
 STAR stars[STAR_COUNT];
 
 void init_star(){
+    int x = 1;
 
-    for(int i=0; i < STAR_COUNT ; i++){
-        stars[i].x = rand() % SCREEN_WIDTH;
+    for(int i=0; i < STAR_COUNT ; i++, x += 2){
+        stars[i].x = x;
         stars[i].y = rand() % SCREEN_HEIGHT ;
-        //stars[i].speed = 0;
-        stars[i].dy = 0;
+        stars[i].speed = RAND_DOUBLE_RANGE(0.1, 1);
     }
 }
 
@@ -17,35 +17,19 @@ void star_update(){
 
     for(int i=0; i < STAR_COUNT; i++){
 
-       if(stars[i].dy==0){
-          stars[i].dy = 1;
-          //stars[i].speed *= 0.95;
-       }else{
-          stars[i].dy = 1.2;
-       }
-       
-       /*if(stars[i].speed > 20){
-          stars[i].speed = 0;
-       }
-       
-       if(stars[i].speed < 0){
-          stars[i].speed = 0;
-       }
-       
-       //star[i].dy = star[i].speed*/
-       stars[i].y += stars[i].dy;
+       stars[i].y += stars[i].speed;
        if (stars[i].y > SCREEN_HEIGHT){
           stars[i].y = 0;
-          //stars[i].speed = 0;
        }
     }
 }
 
 void star_create(){
+    float l;
   
     for(int i=0; i < STAR_COUNT; i++){
-        al_draw_pixel(stars[i].x , stars[i].y, al_map_rgb(0,255,0));
-        //stars[i].x +=2;
+        l = stars[i].speed;
+        al_draw_pixel(stars[i].x , stars[i].y, al_map_rgb(0, l * 255, l * 255));
     }
 }
            

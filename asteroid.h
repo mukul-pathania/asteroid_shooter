@@ -8,20 +8,24 @@
 #define SCREEN_HEIGHT 640
 
 #define MAX_ASTEROID_COUNT 20  //Max allowed asteroids on screen.
-#define SPAWN_RATE 90   //Asteroids will spawn slowly if the spawn rate is high and vice-versa.
+#define SPAWN_RATE 50   //Asteroids will spawn slowly if the spawn rate is high and vice-versa.
 
 typedef struct{
     float x, y, heading, twist, speed, rot_velocity, scale;
     bool gone;
     int life;
     ALLEGRO_COLOR color;
+    enum asteroid_type{ ROCKY, STONEY}type; 
+    //type is used to determine which bitmap to use for drawing the asteroid. 
     BOUNDING_CIRCLE circle;
 }ASTEROID;
 
 extern ALLEGRO_TRANSFORM asteroid_transform;
 extern int asteroid_count;
 extern ASTEROID asteroids[MAX_ASTEROID_COUNT];
+
 void init_asteroids();
+void deinit_asteroids();
 static void create_asteroid(ASTEROID* asteroid);
 static void create_new_asteroid();
 void update_asteroids();
