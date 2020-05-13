@@ -4,6 +4,7 @@
 #include "blast.h"
 #include <math.h>
 #include <allegro5/allegro5.h>
+#include "sounds.h"
 
 bool is_colliding(BOUNDING_CIRCLE* circle1, BOUNDING_CIRCLE* circle2){
     float dx, dy, distance;
@@ -24,7 +25,11 @@ bool check_and_handle_collisions(){
             if(asteroids[j].gone)
                 continue;
             if(is_colliding(&blasts[i].circle, &asteroids[j].circle)){
+                play_exp1sound(); 
                 asteroids[j].life--;
+                if(!asteroids[j].life){
+                     play_exp2sound();
+                 }
                 blasts[i].gone = true;
                 blasts_on_screen--;
                 return true;
