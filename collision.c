@@ -49,5 +49,5 @@ int check_and_handle_collisions(){
             }
         }
     }
-    return num_of_collision;
+    return num_of_collisions;
 }
