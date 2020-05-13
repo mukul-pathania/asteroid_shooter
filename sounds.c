@@ -21,9 +21,9 @@ void audio_init(){
     trail_sound = al_load_sample("resources/rocket_thrusters.wav");
     must_init(trail_sound, "trail sound");
     exp1_sound = al_load_sample("resources/explode1.flac");
-    must_init(blast_sound, "explode sound");
+    must_init(exp1_sound, "explode sound");
     exp2_sound = al_load_sample("resources/explode3.wav");
-    must_init(blast_sound, "explode sound");     
+    must_init(exp2_sound, "explode sound");     
 }
 
 void audio_deinit(){   
