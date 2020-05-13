@@ -11,7 +11,6 @@
 #include "sounds.h"
 #include "bgspace.h"
 #include <time.h>
-#include "planets.h"
 
 void must_init(bool test, const char *description)
 {
