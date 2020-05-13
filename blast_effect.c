@@ -112,3 +112,14 @@ void effect_draw(){
         al_draw_bitmap(effects, x, y, 0);
     }
 }
+
+void deinit_effect(){
+  for(int i = 0;i < SPARKS_FRAMES;i++){
+    al_destroy_bitmap(SPARK[i]);
+  }
+  for(int i = 0;i < EXPLOSION_FRAMES;i++){
+    al_destroy_bitmap(EXPLOSION[i]);
+  }
+  al_destroy_bitmap(SPARK_IMG);
+  al_destroy_bitmap(EXPLOSION_IMG);
+}

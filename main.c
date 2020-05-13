@@ -24,7 +24,7 @@ ALLEGRO_DISPLAY* disp;
 
 int main()
 {
-    
+
     srandom(time(0));
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
@@ -56,7 +56,7 @@ int main()
     bool redraw = true;
     ALLEGRO_EVENT event;
 
-    
+
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
 
@@ -68,7 +68,7 @@ int main()
     init_star();
     effect_init();
     init_planet();
-    
+
     al_start_timer(timer);
     while(1)
     {
@@ -138,6 +138,7 @@ int main()
     deinit_asteroids();
     audio_deinit();
     deinit_ship();
+    deinit_effect();
     destroy_planet();
     return 0;
 }

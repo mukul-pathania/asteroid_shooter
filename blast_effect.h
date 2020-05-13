@@ -19,3 +19,4 @@ void effect_init();
 void effect_add(bool, int, int);
 void effect_draw();
 void effect_update();
+void deinit_effect();

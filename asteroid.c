@@ -24,10 +24,10 @@ void init_asteroids(){
     must_init(asteroid_sprite[0], "asteroid_sprite[0]");
     asteroid_sprite[1] = al_load_bitmap("resources/asteroid2.png"); //load the second type of asteroid.
     must_init(asteroid_sprite[1], "asteroid_sprite[1]");
-    /*We are going to redraw the asteroids on a 40-40 bitmap because we want 
-     *them to be only that large and then use that bitmap. We are doing this 
-     *because according to our understanding this approach is going to be 
-     *better than drawing a scaled bitmap every frame 
+    /*We are going to redraw the asteroids on a 40-40 bitmap because we want
+     *them to be only that large and then use that bitmap. We are doing this
+     *because according to our understanding this approach is going to be
+     *better than drawing a scaled bitmap every frame
      */
     asteroid[0] = al_create_bitmap(40, 40);
     must_init(asteroid[0], "asteroid");
@@ -78,7 +78,7 @@ static void create_asteroid(ASTEROID* asteroid){
     asteroid->color = (rand() % 2) ? (al_map_rgb(255, 0 ,0)) : (al_map_rgb(0 ,255, 0));
     asteroid->circle.x = asteroid->x;
     asteroid->circle.y = asteroid->y;
-    asteroid->circle.radius = 20 * asteroid->scale; 
+    asteroid->circle.radius = 20 * asteroid->scale;
     //radius of the circle(collsion detection) depends on the scale as we are drawing scaled bitmaps.
     asteroid->life = 2 * asteroid->scale;
     asteroid->gone = false;
@@ -137,10 +137,10 @@ static void draw_asteroid(ASTEROID *a){
 
 
     //Following code is used to visualise the bounding circles(collsion detection) of the asteroids.
-    /*al_build_transform(&asteroid_transform, a->circle.x, a->circle.y, 1, 1, a->twist);
-    al_use_transform(&asteroid_transform);
-    al_draw_circle(0, 0, a->circle.radius, al_map_rgb(255, 0, 0), 3.0f);
-    */
+//    al_build_transform(&asteroid_transform, a->circle.x, a->circle.y, 1, 1, a->twist);
+//    al_use_transform(&asteroid_transform);
+//    al_draw_circle(0, 0, a->circle.radius, al_map_rgb(255, 0, 0), 3.0f);
+
 
 
 }
