@@ -2,7 +2,7 @@
 #include "collision.h"
 #include "asteroid.h"
 #include "blast.h"
-#include "blast_effect.h"
+#include "FX.h"
 #include <math.h>
 #include <allegro5/allegro5.h>
 #include "sounds.h"
@@ -37,10 +37,10 @@ int check_and_handle_collisions(){
                 asteroids[j].life--;
                 if(asteroids[j].life){
                     play_exp1sound(); 
-                    effect_add(true, blasts[i].x, blasts[i].y);
+                    FX_add(true, blasts[i].x, blasts[i].y);
                 }
                 else{
-                    effect_add(false, asteroids[j].x, asteroids[j].y);
+                    FX_add(false, asteroids[j].x, asteroids[j].y);
                     play_exp2sound();
                 }
                 blasts[i].gone = true;

@@ -5,7 +5,6 @@
 #include<allegro5/allegro_primitives.h>
 #include<math.h>
 #include"asteroid.h"
-#include "blast_effect.h"
 
 ALLEGRO_TRANSFORM asteroid_transform;
 int asteroid_count = 0;   //Asteroids that are active on screen.

@@ -1,4 +1,4 @@
-#include "blast_effect.h"
+#include "FX.h"
 #include "input.h"
 #include "blast.h"
 #include <stdio.h>
@@ -66,7 +66,7 @@ int main()
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
     init_star();
-    effect_init();
+    FX_init();
     init_planet();
 
     al_start_timer(timer);
@@ -84,7 +84,7 @@ int main()
                 ship_update(ship); //update ship
                 blast_trigger(); //create blasts
                 update_blasts();  //update the blasts on the screen.
-                effect_update();
+                FX_update();
                 trigger_comet();
                 update_comet();
 
@@ -120,7 +120,7 @@ int main()
             draw_comets();
             draw_planet();
             star_create();
-            effect_draw();
+            FX_draw();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_all_asteroids();
             draw_ship(ship); // draws spaceship
@@ -138,7 +138,7 @@ int main()
     deinit_asteroids();
     audio_deinit();
     deinit_ship();
-    deinit_effect();
+    deinit_FX();
     destroy_planet();
     return 0;
 }
