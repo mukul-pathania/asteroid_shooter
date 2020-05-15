@@ -1,3 +1,6 @@
+#ifndef FILE_SOUNDS_SEEN
+#define FILE_SOUNDS_SEEN 1
+
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
@@ -19,8 +22,4 @@ void play_exp1sound();
 void play_exp2sound();
 
 
-
-
-
-
-
+#endif //sounds.h

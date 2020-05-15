@@ -1,3 +1,6 @@
+#ifndef FILE_BLAST_SEEN
+#define FILE_BLAST_SEEN 1
+
 #include "collision.h"
 #define MAX_BLASTS_ON_SCREEN 40
 #define FRAME_INTERVAL_BETWEEN_BLASTS 4
@@ -21,3 +24,5 @@ void blast_trigger();
 void update_blasts();
 void draw_blast(BLAST* blast);
 void draw_all_blasts();
+
+#endif //blast.h

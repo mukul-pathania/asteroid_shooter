@@ -1,3 +1,6 @@
+#ifndef FILE_ASTEROID_SEEN
+#define FILE_ASTEROID_SEEN 1
+
 #include <allegro5/allegro5.h>
 #include "collision.h"
 #define DEG_TO_RAD(x) ((float) (x)*ALLEGRO_PI/180)
@@ -32,3 +35,5 @@ void update_asteroids();
 void draw_all_asteroids();
 static void draw_asteroid(ASTEROID *a);
 void asteroid_trigger();
+
+#endif //asteroid.h

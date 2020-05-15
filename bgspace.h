@@ -1,3 +1,6 @@
+#ifndef FILE_BGSPACE_SEEN
+#define FILE_BGSPACE_SEEN 1
+
 #include <allegro5/allegro5.h>
 #include "asteroid.h"
 
@@ -38,4 +41,4 @@ void draw_comets();
 static void create_new_comet();
 void trigger_comet();
 
-
+#endif //bgspace.h
