@@ -7,17 +7,30 @@
 #include <math.h>
 #include "sounds.h"
 #include "FX.h"
+#include "asteroid.h"
+
+void must_init(bool , const char* );
 
 int blasts_on_screen = 0;
 BLAST blasts[MAX_BLASTS_ON_SCREEN];
 ALLEGRO_TRANSFORM blast_transform;
+ALLEGRO_BITMAP *BLAST_SHEET;
+ALLEGRO_BITMAP *BLAST_IMG;
 
 void init_blasts(){
-    for(int i = 0; i < MAX_BLASTS_ON_SCREEN; i++)
+    for(int i = 0; i < MAX_BLASTS_ON_SCREEN; i++){
         blasts[i].gone = true;
+      }
 }
 
 void create_blast(BLAST *blast){
+    BLAST_SHEET = al_load_bitmap("resources/blast.png");
+    must_init(BLAST_SHEET, "BLAST_SHEET");
+    BLAST_IMG = al_create_bitmap(11, 30);
+    must_init(BLAST_IMG, "BLAST_IMAGE");
+    al_set_target_bitmap(BLAST_IMG);
+    al_draw_scaled_bitmap(BLAST_SHEET, 125, 120, 11, 30, 0, 0, 11/1.3, 30/1.3, 0);
+    al_set_target_bitmap(al_get_backbuffer(disp));
     blast->x = blast->circle.x = ship->x ;
     blast->y = blast->circle.y = ship->y ;
     blast->heading = ship->heading;
@@ -25,8 +38,7 @@ void create_blast(BLAST *blast){
     blast->speed = (BLAST_SPEED > ship->speed * 2) ? (BLAST_SPEED) : (ship->speed * 2);
     blast->scale = 1;
     blast->gone = false;
-    blast->color = al_map_rgb(255, 255, 255);
-    blast->circle.radius = BLAST_LENGTH;
+    blast->circle.radius = al_get_bitmap_width(BLAST_IMG);
     blasts_on_screen++;
 }
 
@@ -73,7 +85,8 @@ void update_blasts(){
 void draw_blast(BLAST* blast){
     al_build_transform(&blast_transform, blast->x, blast->y, blast->scale, blast->scale, blast->heading);
     al_use_transform(&blast_transform);
-	al_draw_line(0, BLAST_LENGTH / 2, 0, -BLAST_LENGTH / 2, blast->color, BLAST_WIDTH);
+//    al_draw_tinted_bitmap(BLAST_IMG, al_map_rgb(255, 0, 0), -5, 0, 0);
+    al_draw_bitmap(BLAST_IMG, -5, 0, 0);
 }
 
 void draw_all_blasts(){
