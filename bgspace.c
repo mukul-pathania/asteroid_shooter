@@ -1,9 +1,10 @@
 #include <math.h>
 #include "bgspace.h"
+#include<allegro5/allegro_primitives.h>
 
 void must_init(bool, const char *);
 STAR stars[STAR_COUNT];
-
+//ALLEGRO_TRANSFORM comet_transform;
 void init_star(){
     int x = 1;
 
@@ -63,10 +64,13 @@ static void create_comet(COMETS *com){
 
 
     com->x =rand() % SCREEN_WIDTH;
-    com->y = rand() % SCREEN_HEIGHT;
+    com->y = 0;//rand() % SCREEN_HEIGHT;
 
     com->speed = 2;
     com->scale = 2;
+    com->circle.x = com->x;
+    com->circle.y = com->y;
+    com->circle.radius = 10;
     com->gone = false;
     comet_count++;
 
@@ -85,12 +89,14 @@ void destroy_planet(){
 void update_comet(){
 
     for(i=0; i<MAX_COMET_COUNT; i++){
+       float dx,dy;
         if(comets[i].gone)
             continue;
-
-        comets[i].x -= comets[i].speed;
-        comets[i].y += comets[i].speed;
-
+        dx = dy = comets[i].speed;
+        //comets[i].x -= comets[i].speed;
+        //comets[i].y += comets[i].speed;
+        comets[i].circle.x = (comets[i].x -= dx);
+        comets[i].circle.y = (comets[i].y += dy); 
 
         if (comets[i].x > SCREEN_WIDTH || comets[i].x < 0 || comets[i].y > 
                 SCREEN_HEIGHT || comets[i].y < 0 ){ 
@@ -101,13 +107,19 @@ void update_comet(){
 }
 
 static void draw_comet(COMETS *c){
-    al_draw_bitmap(COMET, c->x,c->y, 0);
+ 
+    /*al_build_transform(&comet_transform, c->circle.x, c->circle.y, 1, 1, 0);
+    al_use_transform(&comet_transform);
+   al_draw_circle(0, 0, c->circle.radius, al_map_rgb(255, 0, 0), 3.0f);*/
+   al_draw_bitmap(COMET, c->x,c->y, 0);
+       
 }     
 
 void draw_comets(){
     for(i=0;i<MAX_COMET_COUNT;i++){
         if(!comets[i].gone)
             draw_comet(&comets[i]);
+        
     }
 }
 
