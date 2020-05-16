@@ -1,4 +1,4 @@
-#include "blast_effect.h"
+#include "FX.h"
 #include "input.h"
 #include "blast.h"
 #include <stdio.h>
@@ -11,8 +11,6 @@
 #include "sounds.h"
 #include "bgspace.h"
 #include <time.h>
-#include "planets.h"
-#include "bgplanet.h"
 
 void must_init(bool test, const char *description)
 {
@@ -45,6 +43,7 @@ int main()
 
     ALLEGRO_FONT* font = al_create_builtin_font();
     must_init(font, "font");
+
     must_init(al_init_primitives_addon(), "primitives");
     must_init(al_init_image_addon(), "image-addon");
     audio_init();
@@ -66,7 +65,7 @@ int main()
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
     init_star();
-    effect_init();
+    FX_init();
     init_planet();
     init_planets();
 
@@ -85,7 +84,7 @@ int main()
                 ship_update(ship); //update ship
                 blast_trigger(); //create blasts
                 update_blasts();  //update the blasts on the screen.
-                effect_update();
+                FX_update();
                 trigger_comet();
                 update_comet();
                 update_planets();
@@ -122,7 +121,7 @@ int main()
             draw_planets();
             draw_comets();
             star_create();
-            effect_draw();
+            FX_draw();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_all_asteroids();
             draw_ship(ship); // draws spaceship
@@ -140,7 +139,7 @@ int main()
     deinit_asteroids();
     audio_deinit();
     deinit_ship();
-    deinit_effect();
+    deinit_FX();
     destroy_planet();
     return 0;
 }

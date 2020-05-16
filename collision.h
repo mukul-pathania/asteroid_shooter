@@ -6,8 +6,6 @@ typedef struct{
     float x, y, radius;
 }BOUNDING_CIRCLE;
 
-extern int EXPL0SION_SCALE;
-
 bool is_colliding(BOUNDING_CIRCLE* circle1, BOUNDING_CIRCLE* circle2);
 int check_and_handle_collisions();
 

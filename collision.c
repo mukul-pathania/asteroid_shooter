@@ -2,12 +2,10 @@
 #include "collision.h"
 #include "asteroid.h"
 #include "blast.h"
-#include "blast_effect.h"
+#include "FX.h"
 #include <math.h>
 #include <allegro5/allegro5.h>
 #include "sounds.h"
-
-
 
 /*Two circles are provided to this function and it returns true if they collide and false otherwise.
  */
@@ -22,7 +20,7 @@ bool is_colliding(BOUNDING_CIRCLE* circle1, BOUNDING_CIRCLE* circle2){
 }
 
 
-/*This function handles the collisions between the asteroids and the blasts and returns the number
+/*This function handles the collisions between the asteroids and the blasts and returns the number 
  *of collsions and 0 if no collisions took place.
  */
 int check_and_handle_collisions(){
@@ -38,11 +36,11 @@ int check_and_handle_collisions(){
             if(is_colliding(&blasts[i].circle, &asteroids[j].circle)){
                 asteroids[j].life--;
                 if(asteroids[j].life){
-                    play_exp1sound();
-                    effect_add(true, blasts[i].x, blasts[i].y, asteroids[j].scale);
+                    play_exp1sound(); 
+                    FX_add(true, blasts[i].x, blasts[i].y);
                 }
                 else{
-                    effect_add(false, asteroids[j].x, asteroids[j].y, asteroids[j].scale);
+                    FX_add(false, asteroids[j].x, asteroids[j].y);
                     play_exp2sound();
                 }
                 blasts[i].gone = true;
