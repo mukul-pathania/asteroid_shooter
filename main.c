@@ -78,6 +78,8 @@ int main()
             case ALLEGRO_EVENT_TIMER:
                 star_update();
                 check_and_handle_collisions();//check for collision between and blasts and asteroids and handle them if any.
+                check_for_collision();
+                check_for_collision2();
                 asteroid_trigger(); //create new asteroids.
                 update_asteroids(); //update all the asteroids on screen.
                 ship_update(ship); //update ship
@@ -121,9 +123,13 @@ int main()
             star_create();
             FX_draw();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
+            
             draw_all_asteroids();
+            
             draw_ship(ship); // draws spaceship
+             
             draw_all_blasts(); //draws all the blasts
+            
             al_flip_display();
 
             redraw = false;
