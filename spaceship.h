@@ -2,12 +2,15 @@
 #define SPACESHIP_BRAKE_GRADIENT 1.2
 #define SPACESHIP_ACC_GRADIENT 1.2
 #define MAX_TURN_RATE DEG_TO_RAD(6)
+#include "collision.h"
 
 extern ALLEGRO_BITMAP *SPRITESHEET, *SHIP, *TRAIL, *TRAILS[5];
 
 typedef struct{
     float x, y, speed, heading, scale;
     bool is_drifting;
+    int life;
+    BOUNDING_CIRCLE circle;
 }SPACESHIP;
 
 extern SPACESHIP *ship;
