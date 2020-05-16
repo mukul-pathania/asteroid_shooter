@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include "collision.h"
-#include "asteroid.h"
 #include "blast.h"
 #include "FX.h"
 #include <math.h>
 #include <allegro5/allegro5.h>
 #include "sounds.h"
+#include "bgspace.h"
+#include "spaceship.h"
+
 
 /*Two circles are provided to this function and it returns true if they collide and false otherwise.
  */
@@ -35,6 +37,7 @@ int check_and_handle_collisions(){
                 continue;
             if(is_colliding(&blasts[i].circle, &asteroids[j].circle)){
                 asteroids[j].life--;
+                play_exp1sound();
                 if(asteroids[j].life){
                     play_exp1sound(); 
                     FX_add(true, blasts[i].x, blasts[i].y);
@@ -43,6 +46,8 @@ int check_and_handle_collisions(){
                     FX_add(false, asteroids[j].x, asteroids[j].y);
                     play_exp2sound();
                 }
+                if(!asteroids[j].life)
+                   play_exp2sound();
                 blasts[i].gone = true;
                 blasts_on_screen--;
                 num_of_collisions++;
@@ -51,3 +56,41 @@ int check_and_handle_collisions(){
     }
     return num_of_collisions;
 }
+
+void check_for_collision(){
+    for (int i=0; i<MAX_COMET_COUNT; i++){
+        if(comets[i].gone)
+           continue;
+        if(is_colliding(&comets[i].circle, &ship->circle)){
+          ship->life --;
+          comets[i].gone = true;
+          comet_count--;
+        }
+    }
+} 
+
+void check_for_collision2(){
+
+    for(int j = 0; j < MAX_ASTEROID_COUNT; j++){
+            if(asteroids[j].gone)
+               continue;
+            if(is_colliding(&ship->circle, &asteroids[j].circle)){ 
+                 ship->life = 0;
+                 asteroids[j].gone = true;
+                 play_exp2sound();
+                 asteroid_count-- ;
+            }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
