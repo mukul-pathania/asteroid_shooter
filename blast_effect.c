@@ -1,19 +1,26 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FX.h"
+#include "collision.h"
+#include "asteroid.h"
+#include "blast_effect.h"
+#include "blast.h"
 
-
-FX fx[FX_N];
+EFFECT effect[EFFECT_N];
 ALLEGRO_BITMAP *SPARK[SPARKS_FRAMES], *EXPLOSION[EXPLOSION_FRAMES], *EXPLOSION_IMG, *SPARK_IMG;
 void must_init(bool, const char *);
-
-void FX_init(){
+void effect_init(){
 
     EXPLOSION_IMG = al_load_bitmap("resources/explosion.png");
     SPARK_IMG = al_load_bitmap("resources/sparks.png");
 
-    must_init(EXPLOSION_IMG, "Explosion image");
-    must_init(SPARK_IMG, "Sparks image");
+    if(!EXPLOSION_IMG){
+        fprintf(stderr, "Couldn't load Explosions");
+        exit(1);
+    }
+    if(!SPARK_IMG){
+        fprintf(stderr, "Couldn't load Sparks");
+        exit(1);
+    }
     for(int i = 0; i < EXPLOSION_FRAMES; i++){
         EXPLOSION[i] = al_create_bitmap(80, 80);
         must_init(EXPLOSION[i], "EXPLOSION[]");
@@ -51,60 +58,63 @@ void FX_init(){
 
     al_set_target_bitmap(al_get_backbuffer(disp));
 
-    for(int i=0;i<FX_N;i++){
-        fx[i].used = false;
+    for(int i=0;i<EFFECT_N;i++){
+        effect[i].used = false;
     }
 }
 
-void FX_add(bool spark, int x, int y){
-    for(int i = 0; i < FX_N; i++){
-        if(fx[i].used)
+void effect_add(bool spark, int x, int y, int scale){
+    for(int i = 0; i < EFFECT_N; i++){
+        if(effect[i].used)
             continue;
 
-        fx[i].x = x;
-        fx[i].y = y;
-        fx[i].frame = 0;
-        fx[i].spark = spark;
-        fx[i].used = true;
+        effect[i].x = x;
+        effect[i].y = y;
+        effect[i].frame = 0;
+        effect[i].spark = spark;
+        effect[i].used = true;
         return;
     }
 }
 
 
 
-void FX_update(){
-    for(int i = 0;i < FX_N; i++){
-        if(!fx[i].used){
+void effect_update(){
+    for(int i = 0;i < EFFECT_N; i++){
+        if(!effect[i].used){
             continue;
         }
-        fx[i].frame++;
+        effect[i].frame++;
 
-        if((!fx[i].spark && (fx[i].frame == (EXPLOSION_FRAMES * 2))) || ( fx[i].spark && (fx[i].frame == (SPARKS_FRAMES * 2))))
-            fx[i].used = false;
+        if((!effect[i].spark && (effect[i].frame == (EXPLOSION_FRAMES * 2))) || ( effect[i].spark && (effect[i].frame == (SPARKS_FRAMES * 2))))
+            effect[i].used = false;
 
     }
 }
 
 
-void FX_draw(){
-    for(int i = 0; i < FX_N; i++)
+void effect_draw(){
+    for(int i = 0; i < EFFECT_N; i++)
     {
-        if(!fx[i].used)
+        if(!effect[i].used)
             continue;
 
-        int frame_display = fx[i].frame / 2;
-        ALLEGRO_BITMAP* fxs =
-            fx[i].spark
+        int frame_display = effect[i].frame / 2;
+        ALLEGRO_BITMAP* effects =
+            effect[i].spark
             ? SPARK[frame_display]
             : EXPLOSION[frame_display];
 
-        int x = fx[i].x - (al_get_bitmap_width(fxs) / 2);
-        int y = fx[i].y - (al_get_bitmap_height(fxs) / 2);
-        al_draw_bitmap(fxs, x, y, 0);
-    }
+        int x = effect[i].x - (al_get_bitmap_width(effects) / 2);
+        int y = effect[i].y - (al_get_bitmap_height(effects) / 2);
+
+
+        al_draw_bitmap(effects, x, y, 0);
+
+}
 }
 
-void deinit_FX(){
+void deinit_effect(){
   for(int i = 0;i < SPARKS_FRAMES;i++){
     al_destroy_bitmap(SPARK[i]);
   }

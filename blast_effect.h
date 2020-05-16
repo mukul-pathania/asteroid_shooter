@@ -1,22 +1,23 @@
 #include <allegro5/allegro5.h>
+#include "asteroid.h"
 
-#define FX_N 130
+#define EFFECT_N 130
 #define EXPLOSION_FRAMES 8
 #define SPARKS_FRAMES 4
 
-typedef struct FX{
+typedef struct EFFECT{
   int x,y;
   int frame;
   bool spark;
   bool used;
-}FX;
+}EFFECT;
 
-extern FX fx[FX_N];
+extern EFFECT effect[EFFECT_N];
 extern ALLEGRO_BITMAP *SPARK[SPARKS_FRAMES], *EXPLOSION[EXPLOSION_FRAMES], *EXPLOSION_IMG, *SPARK_IMG;
 extern ALLEGRO_DISPLAY* disp;
 
-void FX_init();
-void FX_add(bool, int, int);
-void FX_draw();
-void FX_update();
-void deinit_FX();
+void effect_init();
+void effect_add(bool, int, int, int);
+void effect_draw();
+void effect_update();
+void deinit_effect();

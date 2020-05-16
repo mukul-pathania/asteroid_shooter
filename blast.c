@@ -6,6 +6,7 @@
 #include "asteroid.h"
 #include <math.h>
 #include "sounds.h"
+#include "blast_effect.h"
 
 int blasts_on_screen = 0;
 BLAST blasts[MAX_BLASTS_ON_SCREEN];
