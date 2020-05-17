@@ -85,7 +85,7 @@ void update_blasts(){
 void draw_blast(BLAST* blast){
     al_build_transform(&blast_transform, blast->x, blast->y, blast->scale, blast->scale, blast->heading);
     al_use_transform(&blast_transform);
-//    al_draw_tinted_bitmap(BLAST_IMG, al_map_rgb(255, 0, 0), -5, 0, 0);
+   // al_draw_tinted_bitmap(BLAST_IMG, al_map_rgb(255, 0, 0), -5, 0, 0);
     al_draw_bitmap(BLAST_IMG, -5, 0, 0);
 }
 

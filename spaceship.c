@@ -9,6 +9,7 @@
 #include <math.h>
 #include "sounds.h"
 
+
 ALLEGRO_BITMAP *SPRITESHEET, *SHIP ,*TRAIL ,*TRAILS[5];
 SPACESHIP *ship;
 ALLEGRO_TRANSFORM ship_transform;
@@ -51,6 +52,10 @@ void init_ship(){
     ship->speed = 0;
     ship->heading = 0;
     ship->scale = 2;
+    ship->circle.x = ship->x;
+    ship->circle.y = ship->y;
+    ship->circle.radius = 8*ship->scale;
+    ship->life = 3*ship->scale;
     ship->is_drifting = false;
 
 
@@ -58,13 +63,21 @@ void init_ship(){
 
 
 void draw_ship(SPACESHIP *ship){
+    /*al_build_transform(&ship_transform, ship->circle.x, ship->circle.y, 1, 1, 0);
+    al_use_transform(&ship_transform);
+    al_draw_circle(0, 0, ship->circle.radius, al_map_rgb(255, 0, 0), 3.0f);*/
     al_build_transform(&ship_transform, ship->x, ship->y, ship->scale,
             ship->scale, ship->heading);
     al_use_transform(&ship_transform);
-    al_draw_bitmap(SHIP, -12/2, -13/2, 0);
-    if(key[ALLEGRO_KEY_UP]){
-        al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
+
+
+    if(ship->life){
+       al_draw_bitmap(SHIP, -12/2, -13/2, 0);
+       if(key[ALLEGRO_KEY_UP]){
+           al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
+       }
     }
+    
 }
 
 void deinit_ship(){
@@ -133,8 +146,8 @@ void ship_update(SPACESHIP *ship){
     float dx, dy;
     dx = sin(temp_heading) * ship->speed;
     dy = cos(temp_heading) * ship->speed;
-    ship->x += dx;
-    ship->y -= dy;
+    ship->circle.x = (ship->x += dx);
+    ship->circle.y = (ship->y -= dy);
     if(ship->x > SCREEN_WIDTH)
         ship->x = 0;
     if(ship->x < 0)
