@@ -1,3 +1,6 @@
+#ifndef FILE_SPACESHIP_SEEN
+#define FILE_SPACESHIP_SEEN 1
+
 #define MAX_SPACESHIP_SPEED 20
 #define SPACESHIP_BRAKE_GRADIENT 1.2
 #define SPACESHIP_ACC_GRADIENT 1.2
@@ -16,3 +19,5 @@ void init_ship();
 void deinit_ship();
 void draw_ship(SPACESHIP *ship);
 void ship_update(SPACESHIP *ship);
+
+#endif //spaceship.h

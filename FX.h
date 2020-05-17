@@ -1,3 +1,6 @@
+#ifndef FILE_FX_SEEN
+#define FILE_FX_SEEN 1
+
 #include <allegro5/allegro5.h>
 
 #define FX_N 130
@@ -20,3 +23,5 @@ void FX_add(bool, int, int);
 void FX_draw();
 void FX_update();
 void deinit_FX();
+
+#endif //FX.h

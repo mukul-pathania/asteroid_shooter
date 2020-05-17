@@ -35,4 +35,4 @@ void draw_all_asteroids();
 static void draw_asteroid(ASTEROID *a);
 void asteroid_trigger();
 
-#endif
+#endif //asteroid.h
