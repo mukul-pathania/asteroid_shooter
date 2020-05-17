@@ -11,9 +11,10 @@ typedef struct{
     BOUNDING_CIRCLE circle;
     ALLEGRO_COLOR color;
 }BLAST;
-
+extern ALLEGRO_BITMAP *BLAST_IMG;
 extern ALLEGRO_TRANSFORM blast_transform;
 extern BLAST blasts[MAX_BLASTS_ON_SCREEN];
+extern ALLEGRO_BITMAP *BLAST_SHEET;
 void init_blasts();
 void create_blast(BLAST *blast);
 void create_new_blast();

@@ -67,6 +67,7 @@ int main()
     init_star();
     FX_init();
     init_planet();
+    init_planets();
 
     al_start_timer(timer);
     while(1)
@@ -86,6 +87,7 @@ int main()
                 FX_update();
                 trigger_comet();
                 update_comet();
+                update_planets();
 
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
@@ -116,8 +118,8 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_translate_transform(&transform, 0, 0);
             al_use_transform(&transform);
+            draw_planets();
             draw_comets();
-            draw_planet();
             star_create();
             FX_draw();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
