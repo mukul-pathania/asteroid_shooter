@@ -14,10 +14,7 @@ void must_init(bool test, const char *description);
 
 void init_planets(){
     PLANET = al_load_bitmap("resources/planet.png");
-    if(!PLANET){
-        fprintf(stderr, "Couldn't load Planet");
-        exit(1);
-    }
+    must_init(PLANET, "PLANET_BITMAP");
     PLANETS[0] = al_create_bitmap(180, 135);
     must_init(PLANETS[0], "PLANET[]");
     PLANETS[1] = al_create_bitmap(130, 135);
@@ -119,7 +116,7 @@ ALLEGRO_BITMAP *COMET, *comet;
 COMETS comets[MAX_COMET_COUNT];
 extern ALLEGRO_DISPLAY *disp;
 int i,comet_count=0;
-void init_planet(){
+void init_comet(){
 
     comet = al_load_bitmap("resources/comet.png");
     must_init(comet, "Comet image");
@@ -151,7 +148,7 @@ static void create_comet(COMETS *com){
 }
 
 
-void destroy_planet(){
+void destroy_comet(){
     al_destroy_bitmap(COMET);
     al_destroy_bitmap(comet);
 }

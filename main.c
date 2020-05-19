@@ -66,7 +66,7 @@ int main()
     init_blasts(); //initialise blasts
     init_star();
     FX_init();
-    init_planet();
+    init_comet();
     init_planets();
 
     al_start_timer(timer);
@@ -146,6 +146,6 @@ int main()
     audio_deinit();
     deinit_ship();
     deinit_FX();
-    destroy_planet();
+    destroy_comet();
     return 0;
 }
