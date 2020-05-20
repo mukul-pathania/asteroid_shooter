@@ -41,10 +41,10 @@ int check_and_handle_collisions(){
                 play_exp1sound();
                 if(asteroids[i].life){
                     play_exp1sound(); 
-                    FX_add(true, blasts[j].x, blasts[j].y);
+                    FX_add(true, blasts[j].x, blasts[j].y, 1);
                 }
                 else{
-                    FX_add(false, asteroids[i].x, asteroids[i].y);
+                    FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
                     play_exp2sound();
                 }
                 if(!asteroids[i].life)

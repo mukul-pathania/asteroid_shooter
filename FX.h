@@ -11,6 +11,7 @@ typedef struct FX{
   int x,y;
   int frame;
   bool spark;
+  float scale;
   bool used;
 }FX;
 
@@ -19,7 +20,7 @@ extern ALLEGRO_BITMAP *SPARK[SPARKS_FRAMES], *EXPLOSION[EXPLOSION_FRAMES], *EXPL
 extern ALLEGRO_DISPLAY* disp;
 
 void FX_init();
-void FX_add(bool, int, int);
+void FX_add(bool, int, int, int);
 void FX_draw();
 void FX_update();
 void deinit_FX();

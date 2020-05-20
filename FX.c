@@ -6,6 +6,7 @@
 FX fx[FX_N];
 ALLEGRO_BITMAP *SPARK[SPARKS_FRAMES], *EXPLOSION[EXPLOSION_FRAMES], *EXPLOSION_IMG, *SPARK_IMG;
 void must_init(bool, const char *);
+ALLEGRO_TRANSFORM FX_TRANSFORM;
 
 void FX_init(){
 
@@ -56,7 +57,7 @@ void FX_init(){
     }
 }
 
-void FX_add(bool spark, int x, int y){
+void FX_add(bool spark, int x, int y, int scale){
     for(int i = 0; i < FX_N; i++){
         if(fx[i].used)
             continue;
@@ -65,6 +66,7 @@ void FX_add(bool spark, int x, int y){
         fx[i].y = y;
         fx[i].frame = 0;
         fx[i].spark = spark;
+        fx[i].scale = scale;
         fx[i].used = true;
         return;
     }
@@ -98,8 +100,10 @@ void FX_draw(){
             ? SPARK[frame_display]
             : EXPLOSION[frame_display];
 
-        int x = fx[i].x - (al_get_bitmap_width(fxs) / 2);
-        int y = fx[i].y - (al_get_bitmap_height(fxs) / 2);
+        int x = - al_get_bitmap_width(fxs) / 2;
+        int y = - al_get_bitmap_height(fxs) / 2;
+        al_build_transform(&FX_TRANSFORM, fx[i].x, fx[i].y, fx[i].scale / 2, fx[i].scale / 2, 0);
+        al_use_transform(&FX_TRANSFORM);
         al_draw_bitmap(fxs, x, y, 0);
     }
 }
