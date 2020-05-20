@@ -9,6 +9,5 @@ typedef struct{
 
 bool is_colliding(BOUNDING_CIRCLE* circle1, BOUNDING_CIRCLE* circle2);
 int check_and_handle_collisions();
-void check_for_collision();
-void check_for_collision2();
+void check_for_comet_collision();
 #endif

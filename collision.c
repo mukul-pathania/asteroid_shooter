@@ -9,8 +9,8 @@
 #include "spaceship.h"
 
 
-/*Two circles are provided to this function and it returns true if they collide and false otherwise.
- */
+/*Two circles are provided to this function and it returns true if
+ *they collide and false otherwise.*/
 bool is_colliding(BOUNDING_CIRCLE* circle1, BOUNDING_CIRCLE* circle2){
     float dx, dy, distance;
     dx = circle1->x - circle2->x;
@@ -28,69 +28,53 @@ bool is_colliding(BOUNDING_CIRCLE* circle1, BOUNDING_CIRCLE* circle2){
 int check_and_handle_collisions(){
     int num_of_collisions = 0;
 
-    for(int i = 0; i < MAX_BLASTS_ON_SCREEN; i++){
-        if(blasts[i].gone)//condition is true if blast is not on screen
+    for(int i = 0; i < MAX_ASTEROID_COUNT; i++){
+        if(asteroids[i].gone)//condition is true if asteroid is not on screen
             continue;
 
-        for(int j = 0; j < MAX_ASTEROID_COUNT; j++){
-            if(asteroids[j].gone)//condition is true if the asteroid is not on screen
+        for(int j = 0; j < MAX_BLASTS_ON_SCREEN; j++){
+            if(blasts[j].gone)//condition is true if the blast is not on screen
                 continue;
-            if(is_colliding(&blasts[i].circle, &asteroids[j].circle)){
-                asteroids[j].life--;
+            //check for collision between the asteroid and the blast.
+            if(is_colliding(&blasts[j].circle, &asteroids[i].circle)){
+                asteroids[i].life--;
                 play_exp1sound();
-                if(asteroids[j].life){
+                if(asteroids[i].life){
                     play_exp1sound(); 
-                    FX_add(true, blasts[i].x, blasts[i].y);
+                    FX_add(true, blasts[j].x, blasts[j].y);
                 }
                 else{
-                    FX_add(false, asteroids[j].x, asteroids[j].y);
+                    FX_add(false, asteroids[i].x, asteroids[i].y);
                     play_exp2sound();
                 }
-                if(!asteroids[j].life)
-                   play_exp2sound();
-                blasts[i].gone = true;
+                if(!asteroids[i].life)
+                    play_exp2sound();
+                blasts[j].gone = true;
                 blasts_on_screen--;
                 num_of_collisions++;
             }
         }
+        
+        if(is_colliding(&asteroids[i].circle, &ship->circle)){
+            ship->life = 0;
+            asteroids[i].gone = true;
+            asteroid_count--;
+            play_exp2sound();
+        }
+
+
     }
     return num_of_collisions;
 }
 
-void check_for_collision(){
+void check_for_comet_collision(){
     for (int i=0; i<MAX_COMET_COUNT; i++){
         if(comets[i].gone)
-           continue;
+            continue;
         if(is_colliding(&comets[i].circle, &ship->circle)){
-          ship->life --;
-          comets[i].gone = true;
-          comet_count--;
+            ship->life --;
+            comets[i].gone = true;
+            comet_count--;
         }
     }
 } 
-
-void check_for_collision2(){
-
-    for(int j = 0; j < MAX_ASTEROID_COUNT; j++){
-            if(asteroids[j].gone)
-               continue;
-            if(is_colliding(&ship->circle, &asteroids[j].circle)){ 
-                 ship->life = 0;
-                 asteroids[j].gone = true;
-                 play_exp2sound();
-                 asteroid_count-- ;
-            }
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
