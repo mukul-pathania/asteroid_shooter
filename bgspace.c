@@ -7,6 +7,8 @@
 void must_init(bool, const char *);
 //error checking function defined in main.c
 
+
+ALLEGRO_TRANSFORM BG_SPACE_TRANSFORM;
 /*This function is used to initialise all the components that are drawn 
  *in the background of the game.
  *This function will just call the init functions(declared below) of the 
@@ -47,7 +49,6 @@ void draw_bgspace(){
 ALLEGRO_BITMAP *PLANET_BITMAP, *PLANETS[5];
 PLANET planets[MAX_PLANETS];
 int planets_on_screen;
-ALLEGRO_TRANSFORM planet_transform;
 
 /*This function loads the planet.png bitmap, extract the different planets from
  *the bitmap, redraw them on diferent bitmaps according to our needs and enable 
@@ -126,8 +127,8 @@ static void update_planets(){
 
 
 static void draw_planets(){
-    al_build_transform(&planet_transform, 0, 0, 1, 1, 0);
-    al_use_transform(&planet_transform);
+    al_build_transform(&BG_SPACE_TRANSFORM, 0, 0, 1, 1, 0);
+    al_use_transform(&BG_SPACE_TRANSFORM);
     float width, height;
     for(int i = 0; i < MAX_PLANETS; i++){
         if(planets[i].gone)
@@ -163,6 +164,8 @@ static void update_star(){
 }
 
 static void draw_star(){
+    al_build_transform(&BG_SPACE_TRANSFORM, 0, 0, 1, 1, 0);
+    al_use_transform(&BG_SPACE_TRANSFORM);
     float l;
 
     for(int i=0; i < STAR_COUNT; i++){
@@ -242,6 +245,8 @@ static void create_comet(COMETS *com){
     }
 
     static void draw_comets(){
+        al_build_transform(&BG_SPACE_TRANSFORM, 0, 0, 1, 1, 0);
+        al_use_transform(&BG_SPACE_TRANSFORM);
         for(int i=0;i<MAX_COMET_COUNT;i++){
             if(!comets[i].gone)
                 draw_comet(&comets[i]);
