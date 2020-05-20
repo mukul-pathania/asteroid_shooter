@@ -57,6 +57,8 @@ int check_and_handle_collisions(){
         
         if(is_colliding(&asteroids[i].circle, &ship->circle)){
             ship->life = 0;
+            FX_add(false, ship->x, ship->y, 1);
+            FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
             asteroids[i].gone = true;
             asteroid_count--;
             play_exp2sound();
@@ -73,6 +75,10 @@ void check_for_comet_collision(){
             continue;
         if(is_colliding(&comets[i].circle, &ship->circle)){
             ship->life --;
+            if(ship->life == 0){
+            FX_add(false, ship->x, ship->y, 1);
+            play_exp2sound();
+            }
             comets[i].gone = true;
             comet_count--;
         }

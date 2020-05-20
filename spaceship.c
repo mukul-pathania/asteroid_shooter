@@ -54,7 +54,7 @@ void init_ship(){
     ship->scale = 2;
     ship->circle.x = ship->x;
     ship->circle.y = ship->y;
-    ship->circle.radius = 8*ship->scale;
+    ship->circle.radius = 5*ship->scale;
     ship->life = 3*ship->scale;
     ship->is_drifting = false;
 
@@ -69,7 +69,6 @@ void draw_ship(SPACESHIP *ship){
     al_build_transform(&ship_transform, ship->x, ship->y, ship->scale,
             ship->scale, ship->heading);
     al_use_transform(&ship_transform);
-
 
     if(ship->life){
        al_draw_bitmap(SHIP, -12/2, -13/2, 0);
