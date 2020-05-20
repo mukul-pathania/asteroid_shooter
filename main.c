@@ -115,9 +115,7 @@ int main()
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_translate_transform(&transform, 0, 0);
             al_use_transform(&transform);
-            draw_planets();
-            draw_comets();
-            star_create();
+            draw_bgspace();
             FX_draw();
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             

@@ -35,8 +35,12 @@ void trigger_bgspace(){
     trigger_comet();
 }
 
-void 
-
+/*Draw all the components of the background*/
+void draw_bgspace(){
+    draw_comets();
+    draw_star();
+    draw_planets();
+}
 
 
 
@@ -82,13 +86,14 @@ static void init_planets(){
 }
 
 static void create_planet(){
+    float width, height;
     for(int i = 0; i < MAX_PLANETS; i++){
         if(!planets[i].gone)
             continue;
         planets[i].speed = RAND_DOUBLE_RANGE(2, 5);
         planets[i].bmp = PLANETS[rand() % 5];
-        float width = al_get_bitmap_width(planets[i].bmp) / 2;
-        float height = al_get_bitmap_height(planets[i].bmp) / 2;
+        width = al_get_bitmap_width(planets[i].bmp) / 2;
+        height = al_get_bitmap_height(planets[i].bmp) / 2;
         //The screen is divided into three equal parts horizontally, and the planet
         //enters one of those regions.
         planets[i].x = RAND_DOUBLE_RANGE((i * SCREEN_WIDTH / 3) + width, 
@@ -102,7 +107,7 @@ static void create_planet(){
 }
 static void trigger_planet(){
     int i = rand() % PLANET_SPAWN_RATE;
-    if(i == 0 && planets_on_screen < MAX_PLANETS)
+    if((i == 0) && (planets_on_screen < MAX_PLANETS))
         create_planet();
 }
 static void update_planets(){
@@ -120,7 +125,7 @@ static void update_planets(){
 }
 
 
-void draw_planets(){
+static void draw_planets(){
     al_build_transform(&planet_transform, 0, 0, 1, 1, 0);
     al_use_transform(&planet_transform);
     float width, height;
@@ -157,7 +162,7 @@ static void update_star(){
     }
 }
 
-void star_create(){
+static void draw_star(){
     float l;
 
     for(int i=0; i < STAR_COUNT; i++){
@@ -231,7 +236,7 @@ static void draw_comet(COMETS *c){
     al_draw_bitmap(COMET, c->x,c->y, 0);
 }
 
-void draw_comets(){
+static void draw_comets(){
     for(int i=0;i<MAX_COMET_COUNT;i++){
         if(!comets[i].gone)
             draw_comet(&comets[i]);
