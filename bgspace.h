@@ -9,6 +9,7 @@ extern ALLEGRO_DISPLAY* disp; //The main display of the game.
 
 void init_bgspace();
 void update_bgspace();
+void trigger_bgspace();
 
 
 /*The struct containing the information of the stars.*/
@@ -40,11 +41,11 @@ extern COMETS comets[MAX_COMET_COUNT];
 extern int comet_count;
 
 /*These functions handle all the aspects of comets*/
-void create_comet(COMETS *comet);
-void draw_comet(COMETS *comet);
+static void create_comet(COMETS *comet);
+static void draw_comet(COMETS *comet);
 void draw_comets();
-void create_new_comet();
-void trigger_comet();
+static void create_new_comet();
+static void trigger_comet();
 static void init_comet();
 void destroy_comet();
 static void update_comet();
@@ -65,8 +66,8 @@ extern PLANET planets[MAX_PLANETS];
 extern int planets_on_screen;
 extern ALLEGRO_TRANSFORM planet_transform;
 static void init_planets();
-void trigger_planet();
-void create_planet();
+static void trigger_planet();
+static void create_planet();
 void draw_planets();
 static void update_planets();
 

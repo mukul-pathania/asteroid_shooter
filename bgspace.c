@@ -28,6 +28,16 @@ void update_bgspace(){
     update_comet();
 }
 
+/*This function will trigger the creation of all the components of the
+ *background. It just calls the trigger function of the different components.*/
+void trigger_bgspace(){
+    trigger_planet();
+    trigger_comet();
+}
+
+void 
+
+
 
 
 ALLEGRO_BITMAP *PLANET_BITMAP, *PLANETS[5];
@@ -71,7 +81,7 @@ static void init_planets(){
     planets_on_screen = 0;
 }
 
-void create_planet(){
+static void create_planet(){
     for(int i = 0; i < MAX_PLANETS; i++){
         if(!planets[i].gone)
             continue;
@@ -90,7 +100,7 @@ void create_planet(){
     }
 
 }
-void trigger_planet(){
+static void trigger_planet(){
     int i = rand() % PLANET_SPAWN_RATE;
     if(i == 0 && planets_on_screen < MAX_PLANETS)
         create_planet();
@@ -175,7 +185,7 @@ static void init_comet(){
 }
 
 
-void create_comet(COMETS *com){
+static void create_comet(COMETS *com){
 
 
     com->x =rand() % SCREEN_WIDTH;
@@ -217,7 +227,7 @@ static void update_comet(){
     }
 }
 
-void draw_comet(COMETS *c){
+static void draw_comet(COMETS *c){
     al_draw_bitmap(COMET, c->x,c->y, 0);
 }
 
@@ -229,7 +239,7 @@ void draw_comets(){
     }
 }
 
-void create_new_comet(){
+static void create_new_comet(){
     for(int i=0;i<MAX_COMET_COUNT;i++){
         if(comets[i].gone){
             create_comet(&comets[i]);
@@ -238,7 +248,7 @@ void create_new_comet(){
     }
 }
 
-void trigger_comet(){
+static void trigger_comet(){
     if (comet_count < MAX_COMET_COUNT )
         create_new_comet();
 }
