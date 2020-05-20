@@ -64,10 +64,8 @@ int main()
     init_input();  //To handle keyboard events
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
-    init_star();
     FX_init();
-    init_comet();
-    init_planets();
+    init_bgspace();//initialise all the background elements.
 
     al_start_timer(timer);
     while(1)
@@ -77,7 +75,7 @@ int main()
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
-                star_update();
+                update_bgspace(); //update the background.
                 check_and_handle_collisions();//check for collision between and blasts and asteroids and handle them if any.
                 check_for_collision();
                 check_for_collision2();
@@ -89,8 +87,6 @@ int main()
                 FX_update();
                 trigger_planet();
                 trigger_comet();
-                update_comet();
-                update_planets();
 
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;

@@ -5,11 +5,41 @@
 #include<allegro5/allegro_primitives.h>
 
 void must_init(bool, const char *);
+//error checking function defined in main.c
+
+/*This function is used to initialise all the components that are drawn 
+ *in the background of the game.
+ *This function will just call the init functions(declared below) of the 
+ *different components of the backgorund like comets, stars, planets.
+ *Only this function will be caleed in the main() function instead of 
+ *all the init functions.*/
+void init_bgspace(){
+    init_planets();
+    init_star();
+    init_comet();
+}
+
+/*This function is used to update all the components of the backgorund.
+ *It does not do anything on it's own but call the update function of 
+ *the different components that do the work.*/
+void update_bgspace(){
+    update_planets();
+    update_star();
+    update_comet();
+}
+
+
+
 ALLEGRO_BITMAP *PLANET_BITMAP, *PLANETS[5];
 PLANET planets[MAX_PLANETS];
 int planets_on_screen;
 ALLEGRO_TRANSFORM planet_transform;
-void init_planets(){
+
+/*This function loads the planet.png bitmap, extract the different planets from
+ *the bitmap, redraw them on diferent bitmaps according to our needs and enable 
+ *us to use those bitmaps.
+ *It also initialises the planets array and sets planets_on_screen to 0.*/
+static void init_planets(){
     PLANET_BITMAP = al_load_bitmap("resources/planet.png");
     must_init(PLANET_BITMAP, "PLANET_BITMAP");
     PLANETS[0] = al_create_bitmap(132, 132);//icy-blue planet
@@ -65,7 +95,7 @@ void trigger_planet(){
     if(i == 0 && planets_on_screen < MAX_PLANETS)
         create_planet();
 }
-void update_planets(){
+static void update_planets(){
     float height;
     for(int i = 0; i < MAX_PLANETS; i++){
         if(planets[i].gone)
@@ -79,7 +109,7 @@ void update_planets(){
     }
 }
 
-    
+
 void draw_planets(){
     al_build_transform(&planet_transform, 0, 0, 1, 1, 0);
     al_use_transform(&planet_transform);
@@ -96,7 +126,7 @@ void draw_planets(){
 
 
 STAR stars[STAR_COUNT];
-void init_star(){
+static void init_star(){
     int x = 1;
 
     for(int i=0; i < STAR_COUNT ; i++, x += 2){
@@ -106,7 +136,7 @@ void init_star(){
     }
 }
 
-void star_update(){
+static void update_star(){
 
     for(int i=0; i < STAR_COUNT; i++){
 
@@ -128,14 +158,14 @@ void star_create(){
 
 ALLEGRO_BITMAP *COMET, *comet;
 COMETS comets[MAX_COMET_COUNT];
-extern ALLEGRO_DISPLAY *disp;
-int i,comet_count=0;
-void init_comet(){
+int comet_count=0;
+
+static void init_comet(){
 
     comet = al_load_bitmap("resources/comet.png");
     must_init(comet, "Comet image");
 
-    for(i=0;i<MAX_COMET_COUNT;i++){
+    for(int i=0;i<MAX_COMET_COUNT;i++){
         comets[i].gone = true;
     }
     COMET = al_create_bitmap(20,20);
@@ -145,7 +175,7 @@ void init_comet(){
 }
 
 
-static void create_comet(COMETS *com){
+void create_comet(COMETS *com){
 
 
     com->x =rand() % SCREEN_WIDTH;
@@ -167,9 +197,9 @@ void destroy_comet(){
     al_destroy_bitmap(comet);
 }
 
-void update_comet(){
+static void update_comet(){
 
-    for(i=0; i<MAX_COMET_COUNT; i++){
+    for(int i=0; i<MAX_COMET_COUNT; i++){
         float dx,dy;
         if(comets[i].gone)
             continue;
@@ -187,12 +217,12 @@ void update_comet(){
     }
 }
 
-static void draw_comet(COMETS *c){
+void draw_comet(COMETS *c){
     al_draw_bitmap(COMET, c->x,c->y, 0);
 }
 
 void draw_comets(){
-    for(i=0;i<MAX_COMET_COUNT;i++){
+    for(int i=0;i<MAX_COMET_COUNT;i++){
         if(!comets[i].gone)
             draw_comet(&comets[i]);
 
@@ -200,7 +230,7 @@ void draw_comets(){
 }
 
 void create_new_comet(){
-    for(i=0;i<MAX_COMET_COUNT;i++){
+    for(int i=0;i<MAX_COMET_COUNT;i++){
         if(comets[i].gone){
             create_comet(&comets[i]);
             return;
