@@ -192,68 +192,73 @@ static void init_comet(){
 
 static void create_comet(COMETS *com){
 
+    if(rand() % 2 == 0){
+        com->x = SCREEN_WIDTH;
+        com->y = RAND_DOUBLE_RANGE(0, SCREEN_HEIGHT);
+    }
+    else{
+        com->x = RAND_DOUBLE_RANGE(0, SCREEN_WIDTH);
+        com->y = 0;
+    }
 
-    com->x =rand() % SCREEN_WIDTH;
-    com->y = 0;//rand() % SCREEN_HEIGHT;
+        com->speed = 2;
+        com->scale = 2;
+        com->circle.x = com->x;
+        com->circle.y = com->y;
+        com->circle.radius = 10;
+        com->gone = false;
+        comet_count++;
 
-    com->speed = 2;
-    com->scale = 2;
-    com->circle.x = com->x;
-    com->circle.y = com->y;
-    com->circle.radius = 10;
-    com->gone = false;
-    comet_count++;
-
-}
+    }
 
 
-void destroy_comet(){
-    al_destroy_bitmap(COMET);
-    al_destroy_bitmap(comet);
-}
+    void destroy_comet(){
+        al_destroy_bitmap(COMET);
+        al_destroy_bitmap(comet);
+    }
 
-static void update_comet(){
+    static void update_comet(){
 
-    for(int i=0; i<MAX_COMET_COUNT; i++){
-        float dx,dy;
-        if(comets[i].gone)
-            continue;
-        dx = dy = comets[i].speed;
-        //comets[i].x -= comets[i].speed;
-        //comets[i].y += comets[i].speed;
-        comets[i].circle.x = (comets[i].x -= dx);
-        comets[i].circle.y = (comets[i].y += dy); 
+        for(int i=0; i<MAX_COMET_COUNT; i++){
+            float dx,dy;
+            if(comets[i].gone)
+                continue;
+            dx = dy = comets[i].speed;
+            //comets[i].x -= comets[i].speed;
+            //comets[i].y += comets[i].speed;
+            comets[i].circle.x = (comets[i].x -= dx);
+            comets[i].circle.y = (comets[i].y += dy); 
 
-        if (comets[i].x > SCREEN_WIDTH || comets[i].x < 0 || comets[i].y >
-                SCREEN_HEIGHT || comets[i].y < 0 ){
-            comet_count--;
-            comets[i].gone = true;
+            if (comets[i].x > SCREEN_WIDTH || comets[i].x < 0 || comets[i].y >
+                    SCREEN_HEIGHT || comets[i].y < 0 ){
+                comet_count--;
+                comets[i].gone = true;
+            }
         }
     }
-}
 
-static void draw_comet(COMETS *c){
-    al_draw_bitmap(COMET, c->x,c->y, 0);
-}
-
-static void draw_comets(){
-    for(int i=0;i<MAX_COMET_COUNT;i++){
-        if(!comets[i].gone)
-            draw_comet(&comets[i]);
-
+    static void draw_comet(COMETS *c){
+        al_draw_bitmap(COMET, c->x,c->y, 0);
     }
-}
 
-static void create_new_comet(){
-    for(int i=0;i<MAX_COMET_COUNT;i++){
-        if(comets[i].gone){
-            create_comet(&comets[i]);
-            return;
+    static void draw_comets(){
+        for(int i=0;i<MAX_COMET_COUNT;i++){
+            if(!comets[i].gone)
+                draw_comet(&comets[i]);
+
         }
     }
-}
 
-static void trigger_comet(){
-    if (comet_count < MAX_COMET_COUNT )
-        create_new_comet();
-}
+    static void create_new_comet(){
+        for(int i=0;i<MAX_COMET_COUNT;i++){
+            if(comets[i].gone){
+                create_comet(&comets[i]);
+                return;
+            }
+        }
+    }
+
+    static void trigger_comet(){
+        if ((comet_count < MAX_COMET_COUNT) && (rand() % COMET_SPAWN_RATE == 0))
+            create_new_comet();
+    }

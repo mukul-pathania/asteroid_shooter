@@ -37,10 +37,10 @@ typedef struct{
     BOUNDING_CIRCLE circle;
 }COMETS;
 
-#define MAX_COMET_COUNT 10
+#define MAX_COMET_COUNT 15
 extern COMETS comets[MAX_COMET_COUNT];
 extern int comet_count;
-
+#define COMET_SPAWN_RATE 20
 /*These functions handle all the aspects of comets*/
 static void create_comet(COMETS *comet);
 static void draw_comet(COMETS *comet);
