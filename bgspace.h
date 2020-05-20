@@ -45,11 +45,24 @@ void init_comet();
 void destroy_comet();
 void update_comet();
 
+/*Below declarations handle the moving planets in the background.*/
+extern ALLEGRO_BITMAP *PLANET_BITMAP , *PLANETS[5];
+typedef struct{
+    float x;
+    float y;
+    float speed;
+    ALLEGRO_BITMAP *bmp;
+    bool gone;
+}PLANET;
 
-extern ALLEGRO_BITMAP *PLANET , *PLANETS[5];
-extern float x1,y_1,x2,y2,x3,y3,x4,y4;
-
+#define MAX_PLANETS 3
+#define PLANET_SPAWN_RATE 150
+extern PLANET planets[MAX_PLANETS];
+extern int planets_on_screen;
+extern ALLEGRO_TRANSFORM planet_transform;
 void init_planets();
+void trigger_planet();
+void create_planet();
 void draw_planets();
 void update_planets();
 

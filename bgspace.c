@@ -5,83 +5,97 @@
 #include<allegro5/allegro_primitives.h>
 
 void must_init(bool, const char *);
-STAR stars[STAR_COUNT];
-ALLEGRO_BITMAP *PLANET , *PLANETS[5];
-ALLEGRO_DISPLAY* disp;
-float x1,y_1,x2,y2,x3,y3,x4,y4;
-
-void must_init(bool test, const char *description);
-
+ALLEGRO_BITMAP *PLANET_BITMAP, *PLANETS[5];
+PLANET planets[MAX_PLANETS];
+int planets_on_screen;
+ALLEGRO_TRANSFORM planet_transform;
 void init_planets(){
-    PLANET = al_load_bitmap("resources/planet.png");
-    must_init(PLANET, "PLANET_BITMAP");
-    PLANETS[0] = al_create_bitmap(180, 135);
+    PLANET_BITMAP = al_load_bitmap("resources/planet.png");
+    must_init(PLANET_BITMAP, "PLANET_BITMAP");
+    PLANETS[0] = al_create_bitmap(132, 132);//icy-blue planet
     must_init(PLANETS[0], "PLANET[]");
-    PLANETS[1] = al_create_bitmap(130, 135);
+    PLANETS[1] = al_create_bitmap(135, 135);//yellowish planet
     must_init(PLANETS[1], "PLANET[]");
-    PLANETS[2] = al_create_bitmap(120, 120);
+    PLANETS[2] = al_create_bitmap(104, 104);//violet planet
     must_init(PLANETS[2], "PLANET[]");
-    PLANETS[3] = al_create_bitmap(130, 130);
+    PLANETS[3] = al_create_bitmap(130, 130);//red planet
     must_init(PLANETS[3], "PLANET[]");
-    PLANETS[4] = al_create_bitmap(90, 90);
+    PLANETS[4] = al_create_bitmap(78, 78);//candy planet
     must_init(PLANETS[4], "PLANET[]");
 
     al_set_target_bitmap(PLANETS[0]);
-    al_draw_scaled_bitmap(PLANET, 350, 65, 135, 135, 0, 0, 135, 135, 0);
+    al_draw_scaled_bitmap(PLANET_BITMAP, 500, 70, 132, 132, 0, 0, 132, 132, 0);
     al_set_target_bitmap(PLANETS[1]);
-    al_draw_scaled_bitmap(PLANET, 500, 70, 130, 135, 0, 0, 130, 135, 0);
+    al_draw_scaled_bitmap(PLANET_BITMAP, 497, 209, 135, 135, 0, 0, 135, 135, 0);
     al_set_target_bitmap(PLANETS[2]);
-    al_draw_scaled_bitmap(PLANET, 365, 230, 110, 110, 0, 0, 120, 120, 0);
+    al_draw_scaled_bitmap(PLANET_BITMAP, 367, 233, 104, 104, 0, 0, 104, 104, 0);
     al_set_target_bitmap(PLANETS[3]);
-    al_draw_scaled_bitmap(PLANET, 495, 210, 140, 140, 0, 0, 130, 130, 0);
+    al_draw_scaled_bitmap(PLANET_BITMAP, 534, 374, 86, 86, 0, 0, 86, 86, 0);
     al_set_target_bitmap(PLANETS[4]);
-    al_draw_scaled_bitmap(PLANET, 530, 377, 90, 90, 0, 0, 90, 90, 0);
+    al_draw_scaled_bitmap(PLANET_BITMAP, 540, 467, 78, 78, 0, 0, 78, 78, 0);
 
     al_set_target_bitmap(al_get_backbuffer(disp));
-    x1 = 100, x2 = 500; x3 = 800, x4 = 100;
-    y_1 = 200 ,y2 = 400, y3 = 0, y4 = -100;
+    for(int i = 0; i < MAX_PLANETS; i++)
+        planets[i].gone = true;
 
-
-}
-void draw_planets(){
-
-    al_draw_bitmap(PLANETS[0], x1, y_1, 0);
-    al_draw_bitmap(PLANETS[3], x2, y2, 0);
-    al_draw_bitmap(PLANETS[4], x3, y3, 0);
-
-    if(y_1 >= SCREEN_HEIGHT-135){
-        al_draw_bitmap(PLANETS[0], x1, y_1, 0);
-        al_draw_bitmap(PLANETS[0], x1, y_1-SCREEN_HEIGHT, 0);
-    }
-    if(y2 >= SCREEN_HEIGHT-140){
-        al_draw_bitmap(PLANETS[3], x2, y2, 0);
-        al_draw_bitmap(PLANETS[3], x2, y2-SCREEN_HEIGHT, 0);
-    }
-    if(y3 >= SCREEN_HEIGHT-90){
-        al_draw_bitmap(PLANETS[4], x3, y3, 0);
-        al_draw_bitmap(PLANETS[4], x3, y3-SCREEN_HEIGHT, 0);
-    }
-
+    planets_on_screen = 0;
 }
 
+void create_planet(){
+    for(int i = 0; i < MAX_PLANETS; i++){
+        if(!planets[i].gone)
+            continue;
+        planets[i].speed = RAND_DOUBLE_RANGE(2, 5);
+        planets[i].bmp = PLANETS[rand() % 5];
+        float width = al_get_bitmap_width(planets[i].bmp) / 2;
+        float height = al_get_bitmap_height(planets[i].bmp) / 2;
+        //The screen is divided into three equal parts horizontally, and the planet
+        //enters one of those regions.
+        planets[i].x = RAND_DOUBLE_RANGE((i * SCREEN_WIDTH / 3) + width, 
+                ((i+1) * SCREEN_WIDTH / 3) - width);
+        planets[i].y = -height;
+        planets[i].gone = false;
+        planets_on_screen++;
+        return;
+    }
 
+}
+void trigger_planet(){
+    int i = rand() % PLANET_SPAWN_RATE;
+    if(i == 0 && planets_on_screen < MAX_PLANETS)
+        create_planet();
+}
 void update_planets(){
+    float height;
+    for(int i = 0; i < MAX_PLANETS; i++){
+        if(planets[i].gone)
+            continue;
+        planets[i].y += planets[i].speed;
+        height = al_get_bitmap_height(planets[i].bmp) / 2;
+        if(planets[i].y - height > SCREEN_HEIGHT){
+            planets[i].gone = true;
+            planets_on_screen--;
+        }
+    }
+}
 
-    if(y_1 >= SCREEN_HEIGHT){
-        y_1 -= SCREEN_HEIGHT;
+    
+void draw_planets(){
+    al_build_transform(&planet_transform, 0, 0, 1, 1, 0);
+    al_use_transform(&planet_transform);
+    float width, height;
+    for(int i = 0; i < MAX_PLANETS; i++){
+        if(planets[i].gone)
+            continue;
+        height = al_get_bitmap_height(planets[i].bmp) / 2;
+        width = al_get_bitmap_width(planets[i].bmp) / 2;
+        al_draw_bitmap(planets[i].bmp, planets[i].x - width, planets[i].y - height, 0);
     }
-    if(y2 >= SCREEN_HEIGHT){
-        y2 -= SCREEN_HEIGHT;
-    }
-    if(y3 >= SCREEN_HEIGHT){
-        y3 -= SCREEN_HEIGHT;
-    }
-    y_1+=1.8;
-    y2+=1;
-    y3+=2.5;
 
 }
 
+
+STAR stars[STAR_COUNT];
 void init_star(){
     int x = 1;
 

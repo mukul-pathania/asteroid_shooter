@@ -87,6 +87,7 @@ int main()
                 blast_trigger(); //create blasts
                 update_blasts();  //update the blasts on the screen.
                 FX_update();
+                trigger_planet();
                 trigger_comet();
                 update_comet();
                 update_planets();
