@@ -86,21 +86,20 @@ static void init_planets(){
 }
 
 static void create_planet(){
+    static int bitmap_num = 0;
     float width, height;
     for(int i = 0; i < MAX_PLANETS; i++){
         if(!planets[i].gone)
             continue;
-        planets[i].speed = RAND_DOUBLE_RANGE(2, 5);
-        planets[i].bmp = PLANETS[rand() % 5];
+        planets[i].speed = RAND_DOUBLE_RANGE(1,2);
+        planets[i].bmp = PLANETS[bitmap_num++];
         width = al_get_bitmap_width(planets[i].bmp) / 2;
         height = al_get_bitmap_height(planets[i].bmp) / 2;
-        //The screen is divided into three equal parts horizontally, and the planet
-        //enters one of those regions.
-        planets[i].x = RAND_DOUBLE_RANGE((i * SCREEN_WIDTH / 3) + width, 
-                ((i+1) * SCREEN_WIDTH / 3) - width);
+        planets[i].x = RAND_DOUBLE_RANGE(i * (SCREEN_WIDTH / MAX_PLANETS) + width, (i + 1) * (SCREEN_WIDTH / MAX_PLANETS) - width);
         planets[i].y = -height;
         planets[i].gone = false;
         planets_on_screen++;
+        bitmap_num %= 5;
         return;
     }
 
@@ -110,6 +109,7 @@ static void trigger_planet(){
     if((i == 0) && (planets_on_screen < MAX_PLANETS))
         create_planet();
 }
+
 static void update_planets(){
     float height;
     for(int i = 0; i < MAX_PLANETS; i++){
