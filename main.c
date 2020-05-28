@@ -138,6 +138,6 @@ int main()
     audio_deinit();
     deinit_ship();
     deinit_FX();
-    destroy_comet();
+    destroy_bgspace();
     return 0;
 }

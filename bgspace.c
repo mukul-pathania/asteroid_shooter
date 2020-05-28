@@ -8,6 +8,30 @@ void must_init(bool, const char *);
 //error checking function defined in main.c
 
 
+/*These three functions handle the drawing of stars in the background.*/
+static void init_star();
+static void update_star();
+static void draw_star();
+
+/*These functions handle all the aspects of comets*/
+static void create_comet(COMETS *comet);
+static void draw_comet(COMETS *comet);
+static void draw_comets();
+static void create_new_comet();
+static void trigger_comet();
+static void init_comet();
+static void destroy_comet();
+static void update_comet();
+
+/*These functions handle all the aspects of the planets*/
+static void init_planets();
+static void trigger_planet();
+static void create_planet();
+static void draw_planets();
+static void update_planets();
+static void destroy_planets();
+
+
 ALLEGRO_TRANSFORM BG_SPACE_TRANSFORM;
 /*This function is used to initialise all the components that are drawn 
  *in the background of the game.
@@ -44,6 +68,11 @@ void draw_bgspace(){
     draw_planets();
 }
 
+/*This function will destroy all the resources in use by the background space.*/
+void destroy_bgspace(){
+    destroy_planets();
+    destroy_comet();
+}
 
 
 ALLEGRO_BITMAP *PLANET_BITMAP, *PLANETS[5];
@@ -92,15 +121,15 @@ static void create_planet(){
     for(int i = 0; i < MAX_PLANETS; i++){
         if(!planets[i].gone)
             continue;
-        planets[i].speed = RAND_DOUBLE_RANGE(1,2);
+        planets[i].speed = 1;
         planets[i].bmp = PLANETS[bitmap_num++];
+        bitmap_num %= 5;
         width = al_get_bitmap_width(planets[i].bmp) / 2;
         height = al_get_bitmap_height(planets[i].bmp) / 2;
         planets[i].x = RAND_DOUBLE_RANGE(i * (SCREEN_WIDTH / MAX_PLANETS) + width, (i + 1) * (SCREEN_WIDTH / MAX_PLANETS) - width);
         planets[i].y = -height;
         planets[i].gone = false;
         planets_on_screen++;
-        bitmap_num %= 5;
         return;
     }
 
@@ -138,6 +167,12 @@ static void draw_planets(){
         al_draw_bitmap(planets[i].bmp, planets[i].x - width, planets[i].y - height, 0);
     }
 
+}
+
+static void destroy_planets(){
+    al_destroy_bitmap(PLANET_BITMAP);
+    for(int i = 0; i < 5; i++)
+        al_destroy_bitmap(PLANETS[i]);
 }
 
 
@@ -204,66 +239,66 @@ static void create_comet(COMETS *com){
         com->y = 0;
     }
 
-        com->speed = 2;
-        com->scale = 2;
-        com->circle.x = com->x;
-        com->circle.y = com->y;
-        com->circle.radius = 10;
-        com->gone = false;
-        comet_count++;
+    com->speed = 2;
+    com->scale = 2;
+    com->circle.x = com->x;
+    com->circle.y = com->y;
+    com->circle.radius = 10;
+    com->gone = false;
+    comet_count++;
 
-    }
+}
 
 
-    void destroy_comet(){
-        al_destroy_bitmap(COMET);
-        al_destroy_bitmap(comet);
-    }
+static void destroy_comet(){
+    al_destroy_bitmap(COMET);
+    al_destroy_bitmap(comet);
+}
 
-    static void update_comet(){
+static void update_comet(){
 
-        for(int i=0; i<MAX_COMET_COUNT; i++){
-            float dx,dy;
-            if(comets[i].gone)
-                continue;
-            dx = dy = comets[i].speed;
-            //comets[i].x -= comets[i].speed;
-            //comets[i].y += comets[i].speed;
-            comets[i].circle.x = (comets[i].x -= dx);
-            comets[i].circle.y = (comets[i].y += dy); 
+    for(int i=0; i<MAX_COMET_COUNT; i++){
+        float dx,dy;
+        if(comets[i].gone)
+            continue;
+        dx = dy = comets[i].speed;
+        //comets[i].x -= comets[i].speed;
+        //comets[i].y += comets[i].speed;
+        comets[i].circle.x = (comets[i].x -= dx);
+        comets[i].circle.y = (comets[i].y += dy); 
 
-            if (comets[i].x > SCREEN_WIDTH || comets[i].x < 0 || comets[i].y >
-                    SCREEN_HEIGHT || comets[i].y < 0 ){
-                comet_count--;
-                comets[i].gone = true;
-            }
+        if (comets[i].x > SCREEN_WIDTH || comets[i].x < 0 || comets[i].y >
+                SCREEN_HEIGHT || comets[i].y < 0 ){
+            comet_count--;
+            comets[i].gone = true;
         }
     }
+}
 
-    static void draw_comet(COMETS *c){
-        al_draw_bitmap(COMET, c->x,c->y, 0);
+static void draw_comet(COMETS *c){
+    al_draw_bitmap(COMET, c->x,c->y, 0);
+}
+
+static void draw_comets(){
+    al_build_transform(&BG_SPACE_TRANSFORM, 0, 0, 1, 1, 0);
+    al_use_transform(&BG_SPACE_TRANSFORM);
+    for(int i=0;i<MAX_COMET_COUNT;i++){
+        if(!comets[i].gone)
+            draw_comet(&comets[i]);
+
     }
+}
 
-    static void draw_comets(){
-        al_build_transform(&BG_SPACE_TRANSFORM, 0, 0, 1, 1, 0);
-        al_use_transform(&BG_SPACE_TRANSFORM);
-        for(int i=0;i<MAX_COMET_COUNT;i++){
-            if(!comets[i].gone)
-                draw_comet(&comets[i]);
-
+static void create_new_comet(){
+    for(int i=0;i<MAX_COMET_COUNT;i++){
+        if(comets[i].gone){
+            create_comet(&comets[i]);
+            return;
         }
     }
+}
 
-    static void create_new_comet(){
-        for(int i=0;i<MAX_COMET_COUNT;i++){
-            if(comets[i].gone){
-                create_comet(&comets[i]);
-                return;
-            }
-        }
-    }
-
-    static void trigger_comet(){
-        if ((comet_count < MAX_COMET_COUNT) && (rand() % COMET_SPAWN_RATE == 0))
-            create_new_comet();
-    }
+static void trigger_comet(){
+    if ((comet_count < MAX_COMET_COUNT) && (rand() % COMET_SPAWN_RATE == 0))
+        create_new_comet();
+}
