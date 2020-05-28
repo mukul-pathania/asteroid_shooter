@@ -134,10 +134,10 @@ int main()
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
-    deinit_asteroids();
-    audio_deinit();
-    deinit_ship();
-    deinit_FX();
+    destroy_asteroids();
+    destroy_audio();
+    destroy_ship();
+    destroy_FX();
     destroy_bgspace();
     destroy_blasts();
     return 0;

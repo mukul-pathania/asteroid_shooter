@@ -14,6 +14,11 @@ ALLEGRO_BITMAP *asteroid_sprite[2], *asteroid[2];
 void must_init(bool, const char *);
 extern ALLEGRO_DISPLAY *disp;
 
+static void create_asteroid(ASTEROID* asteroid);
+static void create_new_asteroid();
+static void draw_asteroid(ASTEROID *a);
+
+
 /* Set everything up for using the array of asteroids.*/
 void init_asteroids(){
     for(int i = 0; i < MAX_ASTEROID_COUNT; i++)
@@ -41,7 +46,7 @@ void init_asteroids(){
 }
 
 /*Destroy everything that was created in init_asteroids()*/
-void deinit_asteroids(){
+void destroy_asteroids(){
     al_destroy_bitmap(asteroid_sprite[0]);
     al_destroy_bitmap(asteroid_sprite[1]);
     al_destroy_bitmap(asteroid[0]);

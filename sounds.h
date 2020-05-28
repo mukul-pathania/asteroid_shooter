@@ -14,7 +14,7 @@ extern ALLEGRO_SAMPLE* exp2_sound;
 void must_init(bool test, const char *description);
 
 void audio_init();
-void audio_deinit();
+void destroy_audio();
 
 void play_bsound();
 void play_tsound();

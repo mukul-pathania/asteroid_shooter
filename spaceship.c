@@ -79,7 +79,7 @@ void draw_ship(SPACESHIP *ship){
     
 }
 
-void deinit_ship(){
+void destroy_ship(){
     al_destroy_bitmap(SPRITESHEET);
     al_destroy_bitmap(SHIP);
     al_destroy_bitmap(TRAIL);

@@ -23,6 +23,6 @@ void FX_init();
 void FX_add(bool, int, int, int);
 void FX_draw();
 void FX_update();
-void deinit_FX();
+void destroy_FX();
 
 #endif //FX.h

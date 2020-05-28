@@ -27,12 +27,9 @@ extern int asteroid_count;
 extern ASTEROID asteroids[MAX_ASTEROID_COUNT];
 
 void init_asteroids();
-void deinit_asteroids();
-static void create_asteroid(ASTEROID* asteroid);
-static void create_new_asteroid();
+void destroy_asteroids();
 void update_asteroids();
 void draw_all_asteroids();
-static void draw_asteroid(ASTEROID *a);
 void asteroid_trigger();
 
 #endif //asteroid.h

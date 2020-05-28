@@ -26,7 +26,7 @@ void audio_init(){
     must_init(exp2_sound, "explode sound");     
 }
 
-void audio_deinit(){   
+void destroy_audio(){   
     al_destroy_sample(blast_sound);
     al_destroy_sample(trail_sound);
     al_destroy_sample(exp1_sound);
