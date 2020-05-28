@@ -46,7 +46,7 @@ static void create_blast(BLAST *blast){
     blast->speed = (BLAST_SPEED > ship->speed * 2) ? (BLAST_SPEED) : (ship->speed * 2);
     blast->scale = 1;
     blast->gone = false;
-    blast->circle.radius = al_get_bitmap_width(BLAST_IMG);
+    blast->circle.radius = 3; //only the tip of the blast is checked for collision
     blasts_on_screen++;
 }
 
