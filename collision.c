@@ -54,14 +54,27 @@ int check_and_handle_collisions(){
                 num_of_collisions++;
             }
         }
-        
+
+        /*If the respawn timer or invincibility timer is present then there
+         *is no need to check for collison with the ship.*/
+        if(ship->lives < 0)
+            return num_of_collisions;
+        if(ship->respawn_timer)
+            return num_of_collisions;
+        if(ship->invincible_timer)
+            return num_of_collisions;
+
         if(is_colliding(&asteroids[i].circle, &ship->circle)){
-            ship->life = 0;
+            ship->health = 0;
+            ship->lives--;
+            ship->respawn_timer = 90;
+            ship->invincible_timer = 180;
             FX_add(false, ship->x, ship->y, 1);
             FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
             asteroids[i].gone = true;
             asteroid_count--;
             play_exp2sound();
+            num_of_collisions++;
         }
 
 
@@ -70,14 +83,26 @@ int check_and_handle_collisions(){
 }
 
 void check_for_comet_collision(){
+    if(ship->lives < 0)
+        return;
+    if(ship->respawn_timer)
+        return;
+    if(ship->invincible_timer)
+        return;
+
     for (int i=0; i<MAX_COMET_COUNT; i++){
         if(comets[i].gone)
             continue;
         if(is_colliding(&comets[i].circle, &ship->circle)){
-            ship->life --;
-            if(ship->life == 0){
-            FX_add(false, ship->x, ship->y, 1);
-            play_exp2sound();
+
+            ship->health -= 25;//a ship can take a maximum of 4 comet strikes.
+
+            if(ship->health <= 0){
+                ship->lives--;
+                ship->respawn_timer = 90;
+                ship->invincible_timer = 180;
+                FX_add(false, ship->x, ship->y, 1);
+                play_exp2sound();
             }
             comets[i].gone = true;
             comet_count--;

@@ -12,7 +12,10 @@ extern ALLEGRO_BITMAP *SPRITESHEET, *SHIP, *TRAIL, *TRAILS[5];
 typedef struct{
     float x, y, speed, heading, scale;
     bool is_drifting;
-    int life;
+    int health;
+    int lives;
+    int respawn_timer;
+    int invincible_timer;
     BOUNDING_CIRCLE circle;
 }SPACESHIP;
 

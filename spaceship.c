@@ -49,13 +49,17 @@ void init_ship(){
 
     ship->x = (float)SCREEN_WIDTH / 2;
     ship->y = (float)SCREEN_HEIGHT / 2;
+    ship->health = 100;
+    ship->lives = 3;
+    ship->respawn_timer = 0;
+    ship->invincible_timer = 120;
     ship->speed = 0;
     ship->heading = 0;
     ship->scale = 2;
     ship->circle.x = ship->x;
     ship->circle.y = ship->y;
     ship->circle.radius = 5*ship->scale;
-    ship->life = 3*ship->scale;
+    ship->health = 100;
     ship->is_drifting = false;
 
 
@@ -63,20 +67,21 @@ void init_ship(){
 
 
 void draw_ship(SPACESHIP *ship){
-    /*al_build_transform(&ship_transform, ship->circle.x, ship->circle.y, 1, 1, 0);
-    al_use_transform(&ship_transform);
-    al_draw_circle(0, 0, ship->circle.radius, al_map_rgb(255, 0, 0), 3.0f);*/
+    if(ship->lives < 0)
+        return;
+    if(ship->respawn_timer)
+        return;
+    if(((ship->invincible_timer / 2) % 3) == 1)
+        return;
+
     al_build_transform(&ship_transform, ship->x, ship->y, ship->scale,
             ship->scale, ship->heading);
     al_use_transform(&ship_transform);
 
-    if(ship->life){
-       al_draw_bitmap(SHIP, -12/2, -13/2, 0);
-       if(key[ALLEGRO_KEY_UP]){
-           al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
-       }
+    al_draw_bitmap(SHIP, -12/2, -13/2, 0);
+    if(key[ALLEGRO_KEY_UP]){
+        al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
     }
-    
 }
 
 void destroy_ship(){
@@ -94,6 +99,27 @@ void ship_update(SPACESHIP *ship){
 
     static float temp_heading;// for producing the drifting effect.
     static int sound_interval = 0; //for proper playing of rocket's trail sound.
+
+    if(ship->lives < 0)
+        return;
+    if(ship->invincible_timer > 0)
+        ship->invincible_timer--;
+
+    if(ship->respawn_timer){
+        ship->respawn_timer--;
+        return;
+    }
+
+    if(ship->health <= 0){
+        /*If the ship was destroyed recently and this is the first 
+         * time it is updated.*/
+        ship->x = SCREEN_WIDTH / 2;
+        ship->y = SCREEN_HEIGHT / 2;
+        ship->health = 100;
+        ship->speed = ship->heading = 0;
+    }
+
+
 
     if(ship->speed > 0){
         ship->speed *= 0.95;
