@@ -139,5 +139,6 @@ int main()
     deinit_ship();
     deinit_FX();
     destroy_bgspace();
+    destroy_blasts();
     return 0;
 }
