@@ -16,6 +16,7 @@ ALLEGRO_FONT *heading, *options, *chosen_option;
 static void init_menu();
 static void draw_menu();
 int current_option = 0;
+bool done = false;//keep it here start_game_option_handler uses it.
 
 void init_HUD(){
     must_init(al_init_font_addon(), "Font addon");
@@ -31,6 +32,25 @@ void init_HUD(){
 
 
     init_menu();
+}
+
+
+static void start_game_option_handler(){
+    done = true;
+}
+/*Couldn't think of a name.*/
+static void options_option_handler(){
+    ;//do nothing for now.
+}
+static void controls_option_handler(){
+    ;//do nothing for now
+}
+static void credits_option_handler(){
+    ;//do nothing for now
+}
+static void exit_option_handler(){
+    destroy_main();
+    exit(0);
 }
 
 void destroy_HUD(){
@@ -49,11 +69,19 @@ static void init_menu(){
         menu[i].font = options;
     }
     menu[0].text = "START GAME";
+    menu[0].handler = start_game_option_handler;
     menu[1].text = "OPTIONS";
+    menu[1].handler = options_option_handler;
     menu[2].text = "CONTROLS";
+    menu[2].handler = controls_option_handler;
     menu[3].text = "CREDITS";
+    menu[3].handler = credits_option_handler;
     menu[4].text = "EXIT";
+    menu[4].handler = exit_option_handler;
 }
+
+
+
 
 static void draw_menu(){
     for(int i = 0; i < 5; i++){
@@ -76,19 +104,31 @@ static void draw_welcome(){
     draw_menu();
 }
 
-static void handle_mouse_hover(ALLEGRO_EVENT *event){
+static void handle_mouse_hover_and_click(ALLEGRO_EVENT *event){
     int x = 0, y = 0;
+    bool clicked = false;
     switch(event->type){
         case ALLEGRO_EVENT_MOUSE_AXES:
             x = event->mouse.x;
             y = event->mouse.y;
+            break;
+        case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+            x = event->mouse.x;
+            y = event->mouse.y;
+            if(event->mouse.button & 1)
+                clicked = true;
+            break;
     }
+    
     if(x || y)
         for(int i = 0 ; i < 5; i++)
-            if(x > menu[i].x1 && x < menu[i].x2 && y > menu[i].y1 &&  y < menu[i].y2)
+            if(x > menu[i].x1 && x < menu[i].x2 && y > menu[i].y1 &&  y < menu[i].y2){
                 current_option = i;
-}
+                if(clicked)
+                    menu[current_option].handler();
+            }
 
+}
 
 
 void welcome_screen(){
@@ -104,7 +144,6 @@ void welcome_screen(){
     al_register_event_source(queue, al_get_mouse_event_source());
 
     bool redraw = true;
-    bool done = false;
     ALLEGRO_EVENT event;
     play_menu_music();
 
@@ -138,7 +177,7 @@ void welcome_screen(){
                 }
 
                 if(key[ALLEGRO_KEY_ENTER])
-                    done = true;
+                    menu[current_option].handler();
                 break;
 
 
@@ -146,7 +185,7 @@ void welcome_screen(){
                 exit(0);
 
         }
-        handle_mouse_hover(&event);
+        handle_mouse_hover_and_click(&event);
         keyboard_update(&event);
         if(done)
             break;
