@@ -50,7 +50,7 @@ typedef struct{
 }PLANET;
 
 #define MAX_PLANETS 3
-#define PLANET_SPAWN_RATE 150
+#define PLANET_SPAWN_RATE 190
 extern PLANET planets[MAX_PLANETS];
 extern int planets_on_screen;
 extern ALLEGRO_TRANSFORM planet_transform;

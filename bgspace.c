@@ -126,7 +126,7 @@ static void create_planet(){
         bitmap_num %= 5;
         width = al_get_bitmap_width(planets[i].bmp) / 2;
         height = al_get_bitmap_height(planets[i].bmp) / 2;
-        planets[i].x = RAND_DOUBLE_RANGE(i * (SCREEN_WIDTH / MAX_PLANETS) + width, (i + 1) * (SCREEN_WIDTH / MAX_PLANETS) - width);
+        planets[i].x = (i * (SCREEN_WIDTH / 3)) + RAND_DOUBLE_RANGE(width, (SCREEN_WIDTH / 3) - width);
         planets[i].y = -height;
         planets[i].gone = false;
         planets_on_screen++;
