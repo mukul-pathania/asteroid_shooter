@@ -9,7 +9,7 @@ ALLEGRO_SAMPLE_ID trail_id;
 ALLEGRO_SAMPLE* exp1_sound;
 ALLEGRO_SAMPLE* exp2_sound;
 ALLEGRO_AUDIO_STREAM *menu_music;
-
+ALLEGRO_AUDIO_STREAM *background_music;
 
 void must_init(bool test, const char *description);
 
@@ -34,6 +34,7 @@ void destroy_audio(){
     al_destroy_sample(exp1_sound);
     al_destroy_sample(exp2_sound);
     al_destroy_audio_stream(menu_music);
+    al_destroy_audio_stream(background_music);
 }  
 
 void play_bsound(){
@@ -61,4 +62,15 @@ void play_menu_music(){
 
 void stop_menu_music(){
     al_set_audio_stream_playing(menu_music, false);
+}
+
+void play_background_music(){
+    background_music = al_load_audio_stream("resources/Background_music1.opus", 2, 2048);
+    must_init(background_music , "background music");
+    al_set_audio_stream_playmode(background_music, ALLEGRO_PLAYMODE_LOOP);
+    al_attach_audio_stream_to_mixer(background_music, al_get_default_mixer());
+}
+
+void stop_background_music(){
+    al_set_audio_stream_playing(background_music, false);
 }

@@ -23,6 +23,8 @@ void play_exp1sound();
 void play_exp2sound();
 void play_menu_music();
 void stop_menu_music();
+void play_background_music();
+void stop_background_music();
 
 
 #endif //sounds.h

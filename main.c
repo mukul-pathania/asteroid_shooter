@@ -69,6 +69,7 @@ int main()
     init_bgspace();//initialise all the background elements.
 
     welcome_screen();
+    play_background_music();
     al_start_timer(timer);
     while(1)
     {
@@ -124,7 +125,7 @@ int main()
             redraw = false;
         }
     }
-
+    stop_background_music();
     al_destroy_font(font);
     al_destroy_display(disp);
     al_destroy_timer(timer);
