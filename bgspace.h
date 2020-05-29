@@ -25,20 +25,6 @@ typedef struct{
 extern STAR stars[STAR_COUNT];
 
 
-/*Code for comets in the background*/
-extern ALLEGRO_BITMAP *COMET;
-/*This struct will contain all the info of the comets*/
-typedef struct{
-    float x,y,scale,speed;
-    bool gone;
-    BOUNDING_CIRCLE circle;
-}COMETS;
-
-#define MAX_COMET_COUNT 15
-extern COMETS comets[MAX_COMET_COUNT];
-extern int comet_count;
-#define COMET_SPAWN_RATE 20
-
 /*Below declarations handle the moving planets in the background.*/
 extern ALLEGRO_BITMAP *PLANET_BITMAP , *PLANETS[5];
 typedef struct{

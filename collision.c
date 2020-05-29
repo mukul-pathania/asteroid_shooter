@@ -82,30 +82,3 @@ int check_and_handle_collisions(){
     return num_of_collisions;
 }
 
-void check_for_comet_collision(){
-    if(ship->lives < 0)
-        return;
-    if(ship->respawn_timer)
-        return;
-    if(ship->invincible_timer)
-        return;
-
-    for (int i=0; i<MAX_COMET_COUNT; i++){
-        if(comets[i].gone)
-            continue;
-        if(is_colliding(&comets[i].circle, &ship->circle)){
-
-            ship->health -= 25;//a ship can take a maximum of 4 comet strikes.
-
-            if(ship->health <= 0){
-                ship->lives--;
-                ship->respawn_timer = 90;
-                ship->invincible_timer = 180;
-                FX_add(false, ship->x, ship->y, 1);
-                play_exp2sound();
-            }
-            comets[i].gone = true;
-            comet_count--;
-        }
-    }
-} 

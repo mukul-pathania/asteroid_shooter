@@ -13,16 +13,6 @@ static void init_star();
 static void update_star();
 static void draw_star();
 
-/*These functions handle all the aspects of comets*/
-static void create_comet(COMETS *comet);
-static void draw_comet(COMETS *comet);
-static void draw_comets();
-static void create_new_comet();
-static void trigger_comet();
-static void init_comet();
-static void destroy_comet();
-static void update_comet();
-
 /*These functions handle all the aspects of the planets*/
 static void init_planets();
 static void trigger_planet();
@@ -42,7 +32,6 @@ ALLEGRO_TRANSFORM BG_SPACE_TRANSFORM;
 void init_bgspace(){
     init_planets();
     init_star();
-    init_comet();
 }
 
 /*This function is used to update all the components of the backgorund.
@@ -51,19 +40,16 @@ void init_bgspace(){
 void update_bgspace(){
     update_planets();
     update_star();
-    update_comet();
 }
 
 /*This function will trigger the creation of all the components of the
  *background. It just calls the trigger function of the different components.*/
 void trigger_bgspace(){
     trigger_planet();
-    trigger_comet();
 }
 
 /*Draw all the components of the background*/
 void draw_bgspace(){
-    draw_comets();
     draw_star();
     draw_planets();
 }
@@ -71,7 +57,6 @@ void draw_bgspace(){
 /*This function will destroy all the resources in use by the background space.*/
 void destroy_bgspace(){
     destroy_planets();
-    destroy_comet();
 }
 
 
@@ -209,96 +194,3 @@ static void draw_star(){
     }
 }
 
-ALLEGRO_BITMAP *COMET, *comet;
-COMETS comets[MAX_COMET_COUNT];
-int comet_count=0;
-
-static void init_comet(){
-
-    comet = al_load_bitmap("resources/comet.png");
-    must_init(comet, "Comet image");
-
-    for(int i=0;i<MAX_COMET_COUNT;i++){
-        comets[i].gone = true;
-    }
-    COMET = al_create_bitmap(20,20);
-    al_set_target_bitmap(COMET);
-    al_draw_scaled_bitmap(comet, 0, 0,508,508, 0, 0,20,20,0);
-    al_set_target_bitmap(al_get_backbuffer(disp));
-}
-
-
-static void create_comet(COMETS *com){
-
-    if(rand() % 2 == 0){
-        com->x = SCREEN_WIDTH;
-        com->y = RAND_DOUBLE_RANGE(0, SCREEN_HEIGHT);
-    }
-    else{
-        com->x = RAND_DOUBLE_RANGE(0, SCREEN_WIDTH);
-        com->y = 0;
-    }
-
-    com->speed = 2;
-    com->scale = 2;
-    com->circle.x = com->x;
-    com->circle.y = com->y;
-    com->circle.radius = 10;
-    com->gone = false;
-    comet_count++;
-
-}
-
-
-static void destroy_comet(){
-    al_destroy_bitmap(COMET);
-    al_destroy_bitmap(comet);
-}
-
-static void update_comet(){
-
-    for(int i=0; i<MAX_COMET_COUNT; i++){
-        float dx,dy;
-        if(comets[i].gone)
-            continue;
-        dx = dy = comets[i].speed;
-        //comets[i].x -= comets[i].speed;
-        //comets[i].y += comets[i].speed;
-        comets[i].circle.x = (comets[i].x -= dx);
-        comets[i].circle.y = (comets[i].y += dy); 
-
-        if (comets[i].x > SCREEN_WIDTH || comets[i].x < 0 || comets[i].y >
-                SCREEN_HEIGHT || comets[i].y < 0 ){
-            comet_count--;
-            comets[i].gone = true;
-        }
-    }
-}
-
-static void draw_comet(COMETS *c){
-    al_draw_bitmap(COMET, c->x,c->y, 0);
-}
-
-static void draw_comets(){
-    al_build_transform(&BG_SPACE_TRANSFORM, 0, 0, 1, 1, 0);
-    al_use_transform(&BG_SPACE_TRANSFORM);
-    for(int i=0;i<MAX_COMET_COUNT;i++){
-        if(!comets[i].gone)
-            draw_comet(&comets[i]);
-
-    }
-}
-
-static void create_new_comet(){
-    for(int i=0;i<MAX_COMET_COUNT;i++){
-        if(comets[i].gone){
-            create_comet(&comets[i]);
-            return;
-        }
-    }
-}
-
-static void trigger_comet(){
-    if ((comet_count < MAX_COMET_COUNT) && (rand() % COMET_SPAWN_RATE == 0))
-        create_new_comet();
-}

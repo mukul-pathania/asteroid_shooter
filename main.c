@@ -77,7 +77,6 @@ int main()
             case ALLEGRO_EVENT_TIMER:
                 update_bgspace(); //update the background.
                 check_and_handle_collisions();//check for collision between ship, blasts and asteroids and handle them if any.
-                check_for_comet_collision();
                 asteroid_trigger(); //create new asteroids.
                 update_asteroids(); //update all the asteroids on screen.
                 ship_update(ship); //update ship
