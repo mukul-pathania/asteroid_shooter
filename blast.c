@@ -6,12 +6,13 @@
 #include "asteroid.h"
 #include <math.h>
 #include "sounds.h"
-#include "FX.h"
 
 void must_init(bool , const char* );
 static void create_blast(BLAST *blast);
 static void create_new_blast();
 static void draw_blast(BLAST* blast);
+
+extern ALLEGRO_DISPLAY *disp;
 
 int blasts_on_screen = 0;
 BLAST blasts[MAX_BLASTS_ON_SCREEN];

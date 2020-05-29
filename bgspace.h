@@ -2,7 +2,6 @@
 #define FILE_BGSPACE_SEEN 1
 
 #include <allegro5/allegro5.h>
-#include "collision.h"
 #include "asteroid.h"
 
 extern ALLEGRO_DISPLAY* disp; //The main display of the game.

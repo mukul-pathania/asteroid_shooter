@@ -5,9 +5,8 @@
 #include <math.h>
 #include <allegro5/allegro5.h>
 #include "sounds.h"
-#include "bgspace.h"
 #include "spaceship.h"
-
+#include "asteroid.h"
 
 /*Two circles are provided to this function and it returns true if
  *they collide and false otherwise.*/
