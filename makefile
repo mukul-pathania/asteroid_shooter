@@ -4,16 +4,16 @@ allegro = `pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audi
 main: $(objects)
 	gcc $(objects) -o main $(allegro) -lm
 
-main.o: asteroid.h spaceship.h input.h blast.h FX.h sounds.h bgspace.h HUD.h
-asteroid.o: asteroid.h collision.h
-spaceship.o: asteroid.h spaceship.h input.h collision.h sounds.h
+main.o: main.h asteroid.h spaceship.h input.h blast.h FX.h sounds.h bgspace.h HUD.h
+asteroid.o: asteroid.h  main.h collision.h
+spaceship.o: main.h spaceship.h input.h collision.h sounds.h
 input.o: input.h
-blast.o: blast.h spaceship.h input.h asteroid.h asteroid.h
+blast.o: blast.h spaceship.h input.h main.h asteroid.h
 sounds.o: sounds.h input.h
-bgspace.o: bgspace.h asteroid.h asteroid.h
+bgspace.o: bgspace.h main.h asteroid.h
 collision.o: collision.h asteroid.h blast.h FX.h sounds.h spaceship.h 
 FX.o: FX.h
-HUD.o: HUD.h asteroid.h bgspace.h input.h sounds.h 
+HUD.o: HUD.h main.h bgspace.h input.h sounds.h 
 
 .PHONY: clean
 clean:

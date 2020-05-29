@@ -1,4 +1,4 @@
-/*This file contains all the thibgs taht are required for drawing the
+/*This file contains all the things that are required for drawing the
  *menu on the screen. */
 
 #include <stdio.h>
@@ -6,14 +6,12 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
-#include "asteroid.h"
 #include "HUD.h"
 #include "bgspace.h"
 #include "input.h"
 #include "sounds.h"
+#include "main.h"
 
-extern ALLEGRO_DISPLAY* disp;
-void must_init(bool, const char*);
 ALLEGRO_FONT *heading, *options, *chosen_option;
 static void init_menu();
 static void draw_menu();
@@ -40,8 +38,8 @@ void destroy_HUD(){
     al_destroy_font(options);
 }
 
-MENU menu[5];
 
+MENU menu[5];
 static void init_menu(){
     for(int i = 0, y = 250; i < 5; i++, y += 70){
         menu[i].x1 = 370;
@@ -134,8 +132,10 @@ void welcome_screen(){
                 if(current_option < 0)
                     current_option = 4;
 
-                if(key[ALLEGRO_KEY_ESCAPE])
+                if(key[ALLEGRO_KEY_ESCAPE]){
+                    destroy_main();
                     exit(0);
+                }
 
                 if(key[ALLEGRO_KEY_ENTER])
                     done = true;

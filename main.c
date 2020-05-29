@@ -11,6 +11,8 @@
 #include "sounds.h"
 #include "bgspace.h"
 #include "HUD.h"
+#include "asteroid.h"
+#include "main.h"
 #include <time.h>
 
 void must_init(bool test, const char *description)
@@ -20,19 +22,51 @@ void must_init(bool test, const char *description)
     printf("couldn't initialize %s\n", description);
     exit(1);
 }
-ALLEGRO_DISPLAY* disp;
 
-int main()
-{
+ALLEGRO_TIMER* timer;
+ALLEGRO_EVENT_QUEUE* queue;
+ALLEGRO_DISPLAY* disp;
+ALLEGRO_FONT* font;
+
+
+/*This function calls all the init functions.*/
+void init_main(){
+    init_asteroids(); //initialise asteroids for use.
+    init_input();  //To handle keyboard events
+    init_ship();   //initialize ship
+    init_blasts(); //initialise blasts
+    FX_init();
+    init_HUD();
+    init_bgspace();//initialise all the background elements.
+}
+
+/*This function is going to be super-useful in other files.*/
+void destroy_main(){
+    al_destroy_font(font);
+    al_destroy_display(disp);
+    al_destroy_timer(timer);
+    al_destroy_event_queue(queue);
+    destroy_asteroids();
+    destroy_audio();
+    destroy_ship();
+    destroy_FX();
+    destroy_bgspace();
+    destroy_HUD();
+    destroy_blasts();
+}
+
+
+
+int main(){
 
     srandom(time(0));
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
     must_init(al_install_mouse(),"mouse");
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
+    timer = al_create_timer(1.0 / 30.0);
     must_init(timer, "timer");
 
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+    queue = al_create_event_queue();
     must_init(queue, "queue");
 
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -42,7 +76,7 @@ int main()
     disp = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
     must_init(disp, "display");
 
-    ALLEGRO_FONT* font = al_create_builtin_font();
+    font = al_create_builtin_font();
     must_init(font, "font");
 
     must_init(al_init_primitives_addon(), "primitives");
@@ -59,17 +93,11 @@ int main()
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
 
-
-    init_asteroids(); //initialise asteroids for use.
-    init_input();  //To handle keyboard events
-    init_ship();   //initialize ship
-    init_blasts(); //initialise blasts
-    FX_init();
-    init_HUD();
-    init_bgspace();//initialise all the background elements.
+    init_main();
 
     welcome_screen();
     play_background_music();
+    
     al_start_timer(timer);
     while(1)
     {
@@ -125,17 +153,7 @@ int main()
             redraw = false;
         }
     }
-    stop_background_music();
-    al_destroy_font(font);
-    al_destroy_display(disp);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    destroy_asteroids();
-    destroy_audio();
-    destroy_ship();
-    destroy_FX();
-    destroy_bgspace();
-    destroy_HUD();
-    destroy_blasts();
+
+    destroy_main();
     return 0;
 }

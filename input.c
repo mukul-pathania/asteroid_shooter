@@ -1,5 +1,5 @@
 #include "input.h"
-    
+
 bool key[ALLEGRO_KEY_MAX];
 
 void init_input()

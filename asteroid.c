@@ -5,6 +5,7 @@
 #include<allegro5/allegro_primitives.h>
 #include<math.h>
 #include"asteroid.h"
+#include "main.h"
 
 ALLEGRO_TRANSFORM asteroid_transform;
 int asteroid_count = 0;   //Asteroids that are active on screen.
@@ -141,9 +142,9 @@ static void draw_asteroid(ASTEROID *a){
 
 
     //Following code is used to visualise the bounding circles(collsion detection) of the asteroids.
-//    al_build_transform(&asteroid_transform, a->circle.x, a->circle.y, 1, 1, a->twist);
-//    al_use_transform(&asteroid_transform);
-//    al_draw_circle(0, 0, a->circle.radius, al_map_rgb(255, 0, 0), 3.0f);
+    //    al_build_transform(&asteroid_transform, a->circle.x, a->circle.y, 1, 1, a->twist);
+    //    al_use_transform(&asteroid_transform);
+    //    al_draw_circle(0, 0, a->circle.radius, al_map_rgb(255, 0, 0), 3.0f);
 
 
 

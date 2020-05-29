@@ -1,4 +1,4 @@
-#include "asteroid.h"
+#include "main.h"
 #include "spaceship.h"
 #include "input.h"
 #include <stdio.h>

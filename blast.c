@@ -3,7 +3,7 @@
 #include "blast.h"
 #include "spaceship.h"
 #include "input.h"
-#include "asteroid.h"
+#include "main.h"
 #include <math.h>
 #include "sounds.h"
 
