@@ -14,7 +14,10 @@
 
 extern ALLEGRO_DISPLAY* disp;
 void must_init(bool, const char*);
-ALLEGRO_FONT *heading, *options;
+ALLEGRO_FONT *heading, *options, *chosen_option;
+static void init_menu();
+static void draw_menu();
+int current_option = 0;
 
 void init_HUD(){
     must_init(al_init_font_addon(), "Font addon");
@@ -22,33 +25,54 @@ void init_HUD(){
 
     heading = al_load_ttf_font("resources/SEASRN__.ttf", 72, 0);
     must_init(heading, "Heading Font");
-    options = al_load_ttf_font("resources/SEASRN__.ttf", 36, 0);
+    options = al_load_ttf_font("resources/SEASRN__.ttf", 32, 0);
     must_init(options, "Font for options");
+    chosen_option = al_load_ttf_font("resources/SEASRN__.ttf", 50, 0);
+    must_init(chosen_option, "Font for chosen option");
+
+
+    init_menu();
 }
 void destroy_HUD(){
     al_destroy_font(heading);
     al_destroy_font(options);
 }
 
+MENU menu[5];
+static void init_menu(){
+    for(int i = 0, y = 250; i < 5; i++, y += 70){
+        menu[i].x1 = 380;
+        menu[i].x2 = 700;
+        menu[i].y1 = y;
+        menu[i].y2 = y + 70;
+        menu[i].font = options;
+    }
+    menu[0].text = "START GAME";
+    menu[1].text = "OPTIONS";
+    menu[2].text = "CONTROLS";
+    menu[3].text = "CREDITS";
+    menu[4].text = "EXIT";
+}
+
+static void draw_menu(){
+    for(int i = 0; i < 5; i++){
+        if(i == current_option){
+            al_draw_filled_rectangle(menu[i].x1, menu[i].y1, menu[i].x2, menu[i].y2, al_map_rgba(0, 255, 255, 0.2));
+            al_draw_text(chosen_option, al_map_rgb(0, 0, 0), SCREEN_WIDTH / 2,
+                    menu[i].y1, ALLEGRO_ALIGN_CENTER, menu[i].text);
+            continue;
+        }
+        al_draw_text(menu[i].font, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
+                menu[i].y1, ALLEGRO_ALIGN_CENTER, menu[i].text);
+    }
+}
+
 void draw_welcome(){
-    al_draw_filled_rectangle(150, 50, 930, 240, al_map_rgba(0, 128, 128, 0.2));
+    al_draw_filled_rectangle(120, 5, 950, 180, al_map_rgba(0, 128, 128, 0.2));
     al_draw_multiline_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
-            50, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "Welcome to Asteroid-Shooter");
+            0, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "Welcome to Asteroid-Shooter");
 
-    al_draw_text(options, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
-            250, ALLEGRO_ALIGN_CENTER, "START GAME");
-
-    al_draw_text(options, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
-            320, ALLEGRO_ALIGN_CENTER, "OPTIONS");
-    
-    al_draw_text(options, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
-            390, ALLEGRO_ALIGN_CENTER, "CONTROLS");
-    
-    al_draw_text(options, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
-            460, ALLEGRO_ALIGN_CENTER, "CREDITS");
-    
-    al_draw_text(options, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
-            530, ALLEGRO_ALIGN_CENTER, "EXIT");
+    draw_menu();
 }
 
 void welcome_screen(){
@@ -62,12 +86,12 @@ void welcome_screen(){
     al_register_event_source(queue, al_get_display_event_source(disp));
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_register_event_source(queue, al_get_mouse_event_source());
-    
+
     bool redraw = true;
     bool done = false;
     ALLEGRO_EVENT event;
     play_menu_music();
-    
+
     al_start_timer(timer);
     while(1)
     {
@@ -79,8 +103,22 @@ void welcome_screen(){
                 redraw = true;
                 update_bgspace();
                 trigger_bgspace();
+
+                if(key[ALLEGRO_KEY_DOWN])
+                    current_option++;
+
+                if(key[ALLEGRO_KEY_UP])
+                    current_option--;
+
+                if(current_option > 4)
+                    current_option = 0;
+
+                if(current_option < 0)
+                    current_option = 4;
+
                 if(key[ALLEGRO_KEY_ESCAPE])
                     exit(0);
+
                 if(key[ALLEGRO_KEY_ENTER])
                     done = true;
                 break;
