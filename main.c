@@ -10,6 +10,7 @@
 #include "spaceship.h"
 #include "sounds.h"
 #include "bgspace.h"
+#include "HUD.h"
 #include <time.h>
 
 void must_init(bool test, const char *description)
@@ -55,7 +56,6 @@ int main()
     bool redraw = true;
     ALLEGRO_EVENT event;
 
-
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
 
@@ -65,8 +65,10 @@ int main()
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
     FX_init();
+    init_HUD();
     init_bgspace();//initialise all the background elements.
 
+    welcome_screen();
     al_start_timer(timer);
     while(1)
     {
@@ -92,12 +94,6 @@ int main()
 
                 break;
 
-            case ALLEGRO_EVENT_KEY_DOWN:
-                key[event.keyboard.keycode] = true;
-                break;
-            case ALLEGRO_EVENT_KEY_UP:
-                key[event.keyboard.keycode] = false;
-                break;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 done = true;
                 break;
@@ -116,13 +112,13 @@ int main()
             al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_bgspace();
             FX_draw();
-            
+
             draw_all_asteroids();
-            
+
             draw_ship(ship); // draws spaceship
-             
+
             draw_all_blasts(); //draws all the blasts
-            
+
             al_flip_display();
 
             redraw = false;
@@ -138,6 +134,7 @@ int main()
     destroy_ship();
     destroy_FX();
     destroy_bgspace();
+    destroy_HUD();
     destroy_blasts();
     return 0;
 }
