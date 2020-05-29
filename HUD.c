@@ -22,6 +22,7 @@ int current_option = 0;
 void init_HUD(){
     must_init(al_init_font_addon(), "Font addon");
     must_init(al_init_ttf_addon(), "ttf addon");
+    must_init(al_install_mouse(), "Mouse");
 
     heading = al_load_ttf_font("resources/SEASRN__.ttf", 72, 0);
     must_init(heading, "Heading Font");
@@ -33,16 +34,18 @@ void init_HUD(){
 
     init_menu();
 }
+
 void destroy_HUD(){
     al_destroy_font(heading);
     al_destroy_font(options);
 }
 
 MENU menu[5];
+
 static void init_menu(){
     for(int i = 0, y = 250; i < 5; i++, y += 70){
-        menu[i].x1 = 380;
-        menu[i].x2 = 700;
+        menu[i].x1 = 370;
+        menu[i].x2 = 710;
         menu[i].y1 = y;
         menu[i].y2 = y + 70;
         menu[i].font = options;
@@ -57,7 +60,7 @@ static void init_menu(){
 static void draw_menu(){
     for(int i = 0; i < 5; i++){
         if(i == current_option){
-            al_draw_filled_rectangle(menu[i].x1, menu[i].y1, menu[i].x2, menu[i].y2, al_map_rgba(0, 255, 255, 0.2));
+            al_draw_filled_rectangle(menu[i].x1, menu[i].y1, menu[i].x2, menu[i].y2, al_map_rgba(255, 255, 255, 0.2));
             al_draw_text(chosen_option, al_map_rgb(0, 0, 0), SCREEN_WIDTH / 2,
                     menu[i].y1, ALLEGRO_ALIGN_CENTER, menu[i].text);
             continue;
@@ -67,13 +70,28 @@ static void draw_menu(){
     }
 }
 
-void draw_welcome(){
+static void draw_welcome(){
     al_draw_filled_rectangle(120, 5, 950, 180, al_map_rgba(0, 128, 128, 0.2));
     al_draw_multiline_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
             0, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "Welcome to Asteroid-Shooter");
 
     draw_menu();
 }
+
+static void handle_mouse_hover(ALLEGRO_EVENT *event){
+    int x = 0, y = 0;
+    switch(event->type){
+        case ALLEGRO_EVENT_MOUSE_AXES:
+            x = event->mouse.x;
+            y = event->mouse.y;
+    }
+    if(x || y)
+        for(int i = 0 ; i < 5; i++)
+            if(x > menu[i].x1 && x < menu[i].x2 && y > menu[i].y1 &&  y < menu[i].y2)
+                current_option = i;
+}
+
+
 
 void welcome_screen(){
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
@@ -128,6 +146,7 @@ void welcome_screen(){
                 exit(0);
 
         }
+        handle_mouse_hover(&event);
         keyboard_update(&event);
         if(done)
             break;
