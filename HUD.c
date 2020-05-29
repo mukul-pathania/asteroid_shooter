@@ -10,6 +10,7 @@
 #include "HUD.h"
 #include "bgspace.h"
 #include "input.h"
+#include "sounds.h"
 
 extern ALLEGRO_DISPLAY* disp;
 void must_init(bool, const char*);
@@ -65,6 +66,7 @@ void welcome_screen(){
     bool redraw = true;
     bool done = false;
     ALLEGRO_EVENT event;
+    play_menu_music();
     
     al_start_timer(timer);
     while(1)
@@ -102,4 +104,5 @@ void welcome_screen(){
     }
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
+    stop_menu_music();
 }

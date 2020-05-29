@@ -10,6 +10,7 @@ extern ALLEGRO_SAMPLE* trail_sound;
 extern ALLEGRO_SAMPLE_ID trail_id;
 extern ALLEGRO_SAMPLE* exp1_sound;
 extern ALLEGRO_SAMPLE* exp2_sound;
+extern ALLEGRO_AUDIO_STREAM *menu_music;
 
 void must_init(bool test, const char *description);
 
@@ -20,6 +21,8 @@ void play_bsound();
 void play_tsound();
 void play_exp1sound();
 void play_exp2sound();
+void play_menu_music();
+void stop_menu_music();
 
 
 #endif //sounds.h
