@@ -46,8 +46,6 @@ int check_and_handle_collisions(){
                     FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
                     play_exp2sound();
                 }
-                if(!asteroids[i].life)
-                    play_exp2sound();
                 blasts[j].gone = true;
                 blasts_on_screen--;
                 num_of_collisions++;
@@ -56,24 +54,18 @@ int check_and_handle_collisions(){
 
         /*If the respawn timer or invincibility timer is present then there
          *is no need to check for collison with the ship.*/
-        if(ship->lives < 0)
-            return num_of_collisions;
-        if(ship->respawn_timer)
-            return num_of_collisions;
-        if(ship->invincible_timer)
-            return num_of_collisions;
+        if(ship->lives >= 0 || !ship->invincible_timer || !ship->respawn_timer)
+        {
 
-        if(is_colliding(&asteroids[i].circle, &ship->circle)){
-            ship->health = 0;
-            ship->lives--;
-            ship->respawn_timer = 90;
-            ship->invincible_timer = 180;
-            FX_add(false, ship->x, ship->y, 1);
-            FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
-            asteroids[i].gone = true;
-            asteroid_count--;
-            play_exp2sound();
-            num_of_collisions++;
+            if(is_colliding(&asteroids[i].circle, &ship->circle)){
+                ship->health = 0;
+                FX_add(false, ship->x, ship->y, 1);
+                FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
+                asteroids[i].gone = true;
+                asteroid_count--;
+                play_exp2sound();
+                num_of_collisions++;
+            }
         }
 
 

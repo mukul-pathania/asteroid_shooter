@@ -8,7 +8,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
 #include "sounds.h"
-
+#include "blast.h"
 
 ALLEGRO_BITMAP *SPRITESHEET, *SHIP ,*TRAIL ,*TRAILS[5];
 SPACESHIP *ship;
@@ -102,6 +102,7 @@ void ship_update(SPACESHIP *ship){
 
     if(ship->lives < 0)
         return;
+
     if(ship->invincible_timer > 0)
         ship->invincible_timer--;
 
@@ -113,12 +114,14 @@ void ship_update(SPACESHIP *ship){
     if(ship->health <= 0){
         /*If the ship was destroyed recently and this is the first 
          * time it is updated.*/
+        ship->lives--;
+        ship->respawn_timer = 90;
+        ship->invincible_timer = 180;
         ship->x = SCREEN_WIDTH / 2;
         ship->y = SCREEN_HEIGHT / 2;
         ship->health = 100;
         ship->speed = ship->heading = 0;
     }
-
 
 
     if(ship->speed > 0){

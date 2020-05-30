@@ -62,7 +62,8 @@ static void create_new_blast(){
 void blast_trigger(){
     static int blast_interval = 0;
     if((key[ALLEGRO_KEY_SPACE]))
-        if((blasts_on_screen < MAX_BLASTS_ON_SCREEN) && (blast_interval == 0)){
+        if((blasts_on_screen < MAX_BLASTS_ON_SCREEN) && (blast_interval == 0) 
+                && ship->lives >= 0 && !ship->respawn_timer){
             create_new_blast();
             play_bsound();
             blast_interval = FRAME_INTERVAL_BETWEEN_BLASTS;
