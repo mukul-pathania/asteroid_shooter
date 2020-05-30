@@ -10,10 +10,12 @@
 #include "bgspace.h"
 #include "input.h"
 #include "sounds.h"
+#include "asteroid.h"
 #include "main.h"
 
 ALLEGRO_FONT *heading, *options, *highlighted_option;
-static void init_menu();
+ALLEGRO_TRANSFORM menusystem_transform;
+static void init_main_menu();
 static void draw_menu();
 int current_option = 0;
 bool done = false;//keep it here start_game_option_handler uses it.
@@ -31,7 +33,7 @@ void init_menusystem(){
     must_init(highlighted_option, "Font for chosen option");
 
 
-    init_menu();
+    init_main_menu();
 }
 
 
@@ -61,7 +63,7 @@ void destroy_menusystem(){
 
 
 MENU main_menu[5];
-static void init_menu(){
+static void init_main_menu(){
     for(int i = 0, y = 250; i < 5; i++, y += 70){
         main_menu[i].x1 = 370;
         main_menu[i].x2 = 710;
@@ -98,6 +100,8 @@ static void draw_menu(){
 }
 
 static void draw_welcome(){
+    al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
+    al_use_transform(&menusystem_transform);
     al_draw_filled_rectangle(120, 5, 950, 180, al_map_rgba(0, 128, 128, 0.2));
     al_draw_multiline_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
             0, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "Welcome to Asteroid-Shooter");
@@ -158,6 +162,8 @@ void welcome_screen(){
                 redraw = true;
                 update_bgspace();
                 trigger_bgspace();
+                asteroid_trigger();
+                update_asteroids();
 
                 if(key[ALLEGRO_KEY_DOWN])
                     current_option++;
@@ -194,6 +200,7 @@ void welcome_screen(){
         if(redraw && al_is_event_queue_empty(queue)){
             al_clear_to_color(al_map_rgb(0, 0, 0));
             draw_bgspace();
+            draw_all_asteroids();
             draw_welcome();
             al_flip_display();
             redraw = false;
