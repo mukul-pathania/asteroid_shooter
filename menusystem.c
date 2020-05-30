@@ -90,6 +90,10 @@ static void draw_credits(){
 
     al_draw_text(small_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 420,
             ALLEGRO_ALIGN_CENTER, "Nexus Save the Queen");
+
+    al_draw_multiline_text(medium_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 500,
+            SCREEN_WIDTH, 60, ALLEGRO_ALIGN_CENTER, "STAY AT HOME AND STAY SAFE DURING THESE"
+            " TESTING TIMES OF CORONA.");
 }
 static void draw_controls(){
 }
