@@ -10,7 +10,7 @@
 #include "spaceship.h"
 #include "sounds.h"
 #include "bgspace.h"
-#include "HUD.h"
+#include "menusystem.h"
 #include "asteroid.h"
 #include "main.h"
 #include <time.h>
@@ -36,7 +36,7 @@ void init_main(){
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
     FX_init();
-    init_HUD();
+    init_menusystem();
     init_bgspace();//initialise all the background elements.
 }
 
@@ -51,7 +51,7 @@ void destroy_main(){
     destroy_ship();
     destroy_FX();
     destroy_bgspace();
-    destroy_HUD();
+    destroy_menusystem();
     destroy_blasts();
 }
 

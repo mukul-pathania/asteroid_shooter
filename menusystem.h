@@ -1,8 +1,8 @@
 #ifndef FILE_HUD_SEEN
 #define FILE_HUD_SEEN 1
 
-void init_HUD();
-void destroy_HUD();
+void init_menusystem();
+void destroy_menusystem();
 void welcome_screen();
 
 typedef struct{
@@ -12,6 +12,6 @@ typedef struct{
     void (*handler)();
 }MENU;
 
-extern MENU menu[5];
+extern MENU main_menu[5];
 
-#endif //HUD.h
+#endif //menusystem.h

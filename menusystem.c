@@ -6,19 +6,19 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
-#include "HUD.h"
+#include "menusystem.h"
 #include "bgspace.h"
 #include "input.h"
 #include "sounds.h"
 #include "main.h"
 
-ALLEGRO_FONT *heading, *options, *chosen_option;
+ALLEGRO_FONT *heading, *options, *highlighted_option;
 static void init_menu();
 static void draw_menu();
 int current_option = 0;
 bool done = false;//keep it here start_game_option_handler uses it.
 
-void init_HUD(){
+void init_menusystem(){
     must_init(al_init_font_addon(), "Font addon");
     must_init(al_init_ttf_addon(), "ttf addon");
     must_init(al_install_mouse(), "Mouse");
@@ -27,8 +27,8 @@ void init_HUD(){
     must_init(heading, "Heading Font");
     options = al_load_ttf_font("resources/SEASRN__.ttf", 32, 0);
     must_init(options, "Font for options");
-    chosen_option = al_load_ttf_font("resources/SEASRN__.ttf", 50, 0);
-    must_init(chosen_option, "Font for chosen option");
+    highlighted_option = al_load_ttf_font("resources/SEASRN__.ttf", 50, 0);
+    must_init(highlighted_option, "Font for chosen option");
 
 
     init_menu();
@@ -53,31 +53,32 @@ static void exit_option_handler(){
     exit(0);
 }
 
-void destroy_HUD(){
+void destroy_menusystem(){
     al_destroy_font(heading);
     al_destroy_font(options);
+    al_destroy_font(highlighted_option);
 }
 
 
-MENU menu[5];
+MENU main_menu[5];
 static void init_menu(){
     for(int i = 0, y = 250; i < 5; i++, y += 70){
-        menu[i].x1 = 370;
-        menu[i].x2 = 710;
-        menu[i].y1 = y;
-        menu[i].y2 = y + 70;
-        menu[i].font = options;
+        main_menu[i].x1 = 370;
+        main_menu[i].x2 = 710;
+        main_menu[i].y1 = y;
+        main_menu[i].y2 = y + 70;
+        main_menu[i].font = options;
     }
-    menu[0].text = "START GAME";
-    menu[0].handler = start_game_option_handler;
-    menu[1].text = "OPTIONS";
-    menu[1].handler = options_option_handler;
-    menu[2].text = "CONTROLS";
-    menu[2].handler = controls_option_handler;
-    menu[3].text = "CREDITS";
-    menu[3].handler = credits_option_handler;
-    menu[4].text = "EXIT";
-    menu[4].handler = exit_option_handler;
+    main_menu[0].text = "START GAME";
+    main_menu[0].handler = start_game_option_handler;
+    main_menu[1].text = "OPTIONS";
+    main_menu[1].handler = options_option_handler;
+    main_menu[2].text = "CONTROLS";
+    main_menu[2].handler = controls_option_handler;
+    main_menu[3].text = "CREDITS";
+    main_menu[3].handler = credits_option_handler;
+    main_menu[4].text = "EXIT";
+    main_menu[4].handler = exit_option_handler;
 }
 
 
@@ -86,13 +87,13 @@ static void init_menu(){
 static void draw_menu(){
     for(int i = 0; i < 5; i++){
         if(i == current_option){
-            al_draw_filled_rectangle(menu[i].x1, menu[i].y1, menu[i].x2, menu[i].y2, al_map_rgba(255, 255, 255, 0.2));
-            al_draw_text(chosen_option, al_map_rgb(0, 0, 0), SCREEN_WIDTH / 2,
-                    menu[i].y1, ALLEGRO_ALIGN_CENTER, menu[i].text);
+            al_draw_filled_rectangle(main_menu[i].x1, main_menu[i].y1, main_menu[i].x2, main_menu[i].y2, al_map_rgba(255, 255, 255, 0.2));
+            al_draw_text(highlighted_option, al_map_rgb(0, 0, 0), SCREEN_WIDTH / 2,
+                    main_menu[i].y1, ALLEGRO_ALIGN_CENTER, main_menu[i].text);
             continue;
         }
-        al_draw_text(menu[i].font, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
-                menu[i].y1, ALLEGRO_ALIGN_CENTER, menu[i].text);
+        al_draw_text(main_menu[i].font, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
+                main_menu[i].y1, ALLEGRO_ALIGN_CENTER, main_menu[i].text);
     }
 }
 
@@ -108,24 +109,23 @@ static void handle_mouse_hover_and_click(ALLEGRO_EVENT *event){
     int x = 0, y = 0;
     bool clicked = false;
     switch(event->type){
+
+        case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+            if(event->mouse.button & 1)
+                clicked = true;
+            //no break is added here to use fall through
         case ALLEGRO_EVENT_MOUSE_AXES:
             x = event->mouse.x;
             y = event->mouse.y;
             break;
-        case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-            x = event->mouse.x;
-            y = event->mouse.y;
-            if(event->mouse.button & 1)
-                clicked = true;
-            break;
     }
-    
+
     if(x || y)
         for(int i = 0 ; i < 5; i++)
-            if(x > menu[i].x1 && x < menu[i].x2 && y > menu[i].y1 &&  y < menu[i].y2){
+            if(x > main_menu[i].x1 && x < main_menu[i].x2 && y > main_menu[i].y1 &&  y < main_menu[i].y2){
                 current_option = i;
                 if(clicked)
-                    menu[current_option].handler();
+                    main_menu[current_option].handler();
             }
 
 }
@@ -177,11 +177,12 @@ void welcome_screen(){
                 }
 
                 if(key[ALLEGRO_KEY_ENTER])
-                    menu[current_option].handler();
+                    main_menu[current_option].handler();
                 break;
 
 
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                destroy_main();
                 exit(0);
 
         }
