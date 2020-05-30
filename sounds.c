@@ -42,15 +42,15 @@ void play_bsound(){
 }
 
 void play_tsound(){
-    al_play_sample(trail_sound, 3, 0, 2, ALLEGRO_PLAYMODE_ONCE, &trail_id);
+    al_play_sample(trail_sound, 1, 0, 2, ALLEGRO_PLAYMODE_ONCE, &trail_id);
 } 
 
 void play_exp1sound(){
-    al_play_sample(exp1_sound, 5, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+    al_play_sample(exp1_sound, 0.5, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 }
 
 void play_exp2sound(){
-    al_play_sample(exp2_sound, 5, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+    al_play_sample(exp2_sound, 0.5, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 } 
 
 void play_menu_music(){
