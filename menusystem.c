@@ -25,7 +25,7 @@ static void draw_controls();
 static void draw_credits();
 int current_option = 0;
 int draw_helper = 0;
-bool done = false;//keep it here start_game_option_handler uses it.
+bool menu_done = false;//keep it here start_game_option_handler uses it.
 
 void (*draw[3])();//array of function pointers used in the drawing of menu.
 
@@ -61,6 +61,7 @@ static void start_game_option_handler(){
     al_flush_event_queue(menu_queue);
     game_loop();
     al_start_timer(menu_timer);
+    play_menu_music();
 }
 /*Couldn't think of a name.*/
 static void controls_option_handler(){
@@ -70,6 +71,9 @@ static void credits_option_handler(){
     draw_helper = 2;
 }
 static void exit_option_handler(){
+    al_destroy_timer(menu_timer);
+    al_destroy_event_queue(menu_queue);
+    stop_menu_music();
     destroy_main();
     exit(0);
 
@@ -138,16 +142,16 @@ static void init_main_menu(){
 
 MENU pause_menu[2];
 static void resume_game_option_handler(){
-    ;
+    menu = false;
 }
 
 static void go_to_main_menu_option_handler(){
-    ;
+    done = true;
 }
 
 static void init_pause_menu(){
     pause_menu[0].x1 = pause_menu[1].x1 = 270;
-    pause_menu[0].x2 = pause_menu[1].x1 = 810;
+    pause_menu[0].x2 = pause_menu[1].x2 = 810;
     pause_menu[0].font = pause_menu[1].font = options;
     pause_menu[0].y1 = 250;
     pause_menu[0].y2 = 320;
@@ -185,17 +189,17 @@ static void draw_welcome(){
 }
 
 /*This is going to be used in the main game loop to draw pause menu.*/
-void draw_pause_menu(){
+void draw_pause_menu(int which_choice){
     al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
     al_use_transform(&menusystem_transform);
     al_draw_filled_rectangle(120, 5, 950, 100, al_map_rgba(0, 128, 128, 0.2));
     al_draw_multiline_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
             0, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "Asteroid-Shooter");
-    draw_menu(pause_menu, 2, current_option);
+    draw_menu(pause_menu, 2, which_choice);
 
 }
 
-static void handle_mouse_hover_and_click(ALLEGRO_EVENT *event, MENU *menu, int length){
+void handle_mouse_hover_and_click(ALLEGRO_EVENT *event, MENU *menu, int length){
     int x = 0, y = 0;
     bool clicked = false;
     switch(event->type){
@@ -263,14 +267,9 @@ void welcome_screen(){
                 if(current_option < 0)
                     current_option = 3;
 
-                if(key[ALLEGRO_KEY_ESCAPE]){
-                    if(draw_helper == 0){
-                        destroy_main();
-                        exit(0);
-                    }
-                    else
-                        draw_helper = 0;
-                }
+                if(key[ALLEGRO_KEY_ESCAPE])
+                    draw_helper = 0;
+                
 
                 if(key[ALLEGRO_KEY_ENTER] && draw_helper == 0)
                     main_menu[current_option].handler();
@@ -282,9 +281,11 @@ void welcome_screen(){
                 exit(0);
 
         }
+
         handle_mouse_hover_and_click(&event, main_menu, 4);
         keyboard_update(&event);
-        if(done)
+        
+        if(menu_done)
             break;
 
         if(redraw && al_is_event_queue_empty(menu_queue)){

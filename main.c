@@ -29,28 +29,29 @@ ALLEGRO_DISPLAY* disp;
 ALLEGRO_FONT* font;
 ALLEGRO_EVENT event;
 ALLEGRO_TRANSFORM transform;
+bool done = false;
+bool menu = false;
 
 
 /*This function calls all the init functions.*/
 void init_main(){
-    init_asteroids(); //initialise asteroids for use.
     init_input();  //To handle keyboard events
+    init_menusystem();
+    init_asteroids(); //initialise asteroids for use.
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
     FX_init();
-    init_menusystem();
     init_bgspace();//initialise all the background elements.
+    
 }
+
 
 /*This function is going to be super-useful in other files.*/
 void destroy_main(){
-    al_destroy_font(font);
     al_destroy_display(disp);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    destroy_asteroids();
     destroy_audio();
     destroy_ship();
+    destroy_asteroids();
     destroy_FX();
     destroy_bgspace();
     destroy_menusystem();
@@ -59,10 +60,25 @@ void destroy_main(){
 
 void game_loop(){
     
+    timer = al_create_timer(1.0 / 30.0);
+    must_init(timer, "timer");
+
+    queue = al_create_event_queue();
+    must_init(queue, "queue");
+    
+    font = al_create_builtin_font();
+    must_init(font, "font");
+
+    must_init(al_install_mouse(), "Mouse in game loop"); 
+    al_register_event_source(queue, al_get_keyboard_event_source());
+    al_register_event_source(queue, al_get_display_event_source(disp));
+    al_register_event_source(queue, al_get_timer_event_source(timer));
+    al_register_event_source(queue, al_get_mouse_event_source());
+    
     play_background_music();
     al_identity_transform(&transform);
-    bool done = false;
     bool redraw = true;
+    int choice = 0;
     al_start_timer(timer);
     
     while(1){
@@ -72,6 +88,27 @@ void game_loop(){
         switch(event.type){
 
             case ALLEGRO_EVENT_TIMER:
+                redraw = true;
+                
+                if(key[ALLEGRO_KEY_ESCAPE])
+                    menu = true;
+                
+                if(menu){
+                    if(key[ALLEGRO_KEY_UP])
+                        choice--;
+                    if(key[ALLEGRO_KEY_DOWN])
+                        choice++;
+                    if(choice < 0)
+                        choice = 1;
+                    if(choice > 1)
+                        choice = 0;
+
+                    if(key[ALLEGRO_KEY_ENTER])
+                        pause_menu[choice].handler();
+                    
+                    //This break is intentional
+                    break;
+                }
                 update_bgspace(); //update the background.
                 check_and_handle_collisions();//check for collision between ship, blasts and asteroids and handle them if any.
                 asteroid_trigger(); //create new asteroids.
@@ -81,11 +118,6 @@ void game_loop(){
                 update_blasts();  //update the blasts on the screen.
                 FX_update();
                 trigger_bgspace();
-                if(key[ALLEGRO_KEY_ESCAPE])
-                    done = true;
-
-                redraw = true;
-
 
                 break;
 
@@ -95,6 +127,9 @@ void game_loop(){
         }
 
         keyboard_update(&event);
+
+        if(menu)
+            handle_mouse_hover_and_click(&event, pause_menu, choice);
 
         if(done)
             break;
@@ -112,6 +147,9 @@ void game_loop(){
             draw_ship(ship); // draws spaceship
 
             draw_all_blasts(); //draws all the blasts
+            
+            if(menu)
+                draw_pause_menu(choice);
 
             al_flip_display();
 
@@ -119,7 +157,10 @@ void game_loop(){
         }
     }
     stop_background_music();
-
+    al_destroy_font(font);
+    al_destroy_timer(timer);
+    al_destroy_event_queue(queue);
+    return;
 
 }
 
@@ -130,11 +171,6 @@ int main(){
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
     must_init(al_install_mouse(),"mouse");
-    timer = al_create_timer(1.0 / 30.0);
-    must_init(timer, "timer");
-
-    queue = al_create_event_queue();
-    must_init(queue, "queue");
 
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
     al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
@@ -143,16 +179,10 @@ int main(){
     disp = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
     must_init(disp, "display");
 
-    font = al_create_builtin_font();
-    must_init(font, "font");
 
     must_init(al_init_primitives_addon(), "primitives");
     must_init(al_init_image_addon(), "image-addon");
     audio_init();
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_display_event_source(disp));
-    al_register_event_source(queue, al_get_timer_event_source(timer));
-    al_register_event_source(queue, al_get_mouse_event_source());
 
     init_main();
 

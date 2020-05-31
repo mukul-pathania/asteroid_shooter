@@ -13,6 +13,7 @@
 extern ALLEGRO_TIMER* timer;
 extern ALLEGRO_EVENT_QUEUE* queue;
 extern ALLEGRO_DISPLAY* disp;
+extern bool done, menu;
 
 void destroy_main();
 void game_loop();
