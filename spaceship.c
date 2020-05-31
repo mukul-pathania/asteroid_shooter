@@ -121,6 +121,7 @@ void ship_update(SPACESHIP *ship){
         ship->y = SCREEN_HEIGHT / 2;
         ship->health = 100;
         ship->speed = ship->heading = 0;
+        al_stop_sample(&trail_id);
     }
 
 

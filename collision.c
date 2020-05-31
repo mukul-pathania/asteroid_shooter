@@ -54,7 +54,7 @@ int check_and_handle_collisions(){
 
         /*If the respawn timer or invincibility timer is present then there
          *is no need to check for collison with the ship.*/
-        if(ship->lives >= 0 || !ship->invincible_timer || !ship->respawn_timer)
+        if(ship->lives >= 0 && ship->invincible_timer == 0 && ship->respawn_timer == 0)
         {
 
             if(is_colliding(&asteroids[i].circle, &ship->circle)){
