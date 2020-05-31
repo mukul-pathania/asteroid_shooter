@@ -15,6 +15,8 @@
 
 ALLEGRO_FONT *heading, *options, *highlighted_option, *medium_scale, *small_scale;
 ALLEGRO_TRANSFORM menusystem_transform;
+ALLEGRO_TIMER *menu_timer;
+ALLEGRO_EVENT_QUEUE *menu_queue;
 static void init_main_menu();
 static void init_pause_menu();
 static void draw_menu(MENU*, int, int);
@@ -54,7 +56,11 @@ void init_menusystem(){
 
 
 static void start_game_option_handler(){
-    done = true;
+    stop_menu_music();
+    al_stop_timer(menu_timer);
+    al_flush_event_queue(menu_queue);
+    game_loop();
+    al_start_timer(menu_timer);
 }
 /*Couldn't think of a name.*/
 static void controls_option_handler(){
@@ -66,6 +72,7 @@ static void credits_option_handler(){
 static void exit_option_handler(){
     destroy_main();
     exit(0);
+
 }
 static void draw_credits(){
     al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
@@ -215,25 +222,25 @@ static void handle_mouse_hover_and_click(ALLEGRO_EVENT *event, MENU *menu, int l
 
 
 void welcome_screen(){
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
-    must_init(timer, "timer welcome screen");
+    menu_timer = al_create_timer(1.0 / 30.0);
+    must_init(menu_timer, "menu_timer welcome screen");
 
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    must_init(queue, "queue welcome screen");
+    menu_queue = al_create_event_queue();
+    must_init(menu_queue, "menu_queue welcome screen");
 
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_display_event_source(disp));
-    al_register_event_source(queue, al_get_timer_event_source(timer));
-    al_register_event_source(queue, al_get_mouse_event_source());
+    al_register_event_source(menu_queue, al_get_keyboard_event_source());
+    al_register_event_source(menu_queue, al_get_display_event_source(disp));
+    al_register_event_source(menu_queue, al_get_timer_event_source(menu_timer));
+    al_register_event_source(menu_queue, al_get_mouse_event_source());
 
     bool redraw = true;
     ALLEGRO_EVENT event;
     play_menu_music();
 
-    al_start_timer(timer);
+    al_start_timer(menu_timer);
     while(1)
     {
-        al_wait_for_event(queue, &event);
+        al_wait_for_event(menu_queue, &event);
 
         switch(event.type)
         {
@@ -280,7 +287,7 @@ void welcome_screen(){
         if(done)
             break;
 
-        if(redraw && al_is_event_queue_empty(queue)){
+        if(redraw && al_is_event_queue_empty(menu_queue)){
             al_clear_to_color(al_map_rgb(0, 0, 0));
             draw_bgspace();
             draw_all_asteroids();
@@ -289,7 +296,7 @@ void welcome_screen(){
             redraw = false;
         }
     }
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
+    al_destroy_timer(menu_timer);
+    al_destroy_event_queue(menu_queue);
     stop_menu_music();
 }

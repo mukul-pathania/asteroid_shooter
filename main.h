@@ -15,6 +15,7 @@ extern ALLEGRO_EVENT_QUEUE* queue;
 extern ALLEGRO_DISPLAY* disp;
 
 void destroy_main();
+void game_loop();
 void must_init(bool, const char*);
 
 #endif //main.h
