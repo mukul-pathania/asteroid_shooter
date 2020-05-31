@@ -4,6 +4,7 @@
 void init_menusystem();
 void destroy_menusystem();
 void welcome_screen();
+void draw_pause_menu();
 
 typedef struct{
     float x1, y1, x2, y2;
@@ -12,6 +13,7 @@ typedef struct{
     void (*handler)();
 }MENU;
 
-extern MENU main_menu[5];
+extern MENU main_menu[4];
+extern MENU pause_menu[2];
 
 #endif //menusystem.h

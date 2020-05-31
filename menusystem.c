@@ -16,7 +16,8 @@
 ALLEGRO_FONT *heading, *options, *highlighted_option, *medium_scale, *small_scale;
 ALLEGRO_TRANSFORM menusystem_transform;
 static void init_main_menu();
-static void draw_menu();
+static void init_pause_menu();
+static void draw_menu(MENU*, int, int);
 static void draw_welcome();
 static void draw_controls();
 static void draw_credits();
@@ -48,6 +49,7 @@ void init_menusystem(){
     draw[2] = draw_credits;
 
     init_main_menu();
+    init_pause_menu();
 }
 
 
@@ -108,7 +110,7 @@ void destroy_menusystem(){
 }
 
 
-MENU main_menu[5];
+MENU main_menu[4];
 static void init_main_menu(){
     for(int i = 0, y = 250; i < 5; i++, y += 70){
         main_menu[i].x1 = 370;
@@ -127,19 +129,41 @@ static void init_main_menu(){
     main_menu[3].handler = exit_option_handler;
 }
 
+MENU pause_menu[2];
+static void resume_game_option_handler(){
+    ;
+}
+
+static void go_to_main_menu_option_handler(){
+    ;
+}
+
+static void init_pause_menu(){
+    pause_menu[0].x1 = pause_menu[1].x1 = 270;
+    pause_menu[0].x2 = pause_menu[1].x1 = 810;
+    pause_menu[0].font = pause_menu[1].font = options;
+    pause_menu[0].y1 = 250;
+    pause_menu[0].y2 = 320;
+    pause_menu[1].y1 = 390;
+    pause_menu[1].y2 = 460;
+
+    pause_menu[0].text = "RESUME GAME";
+    pause_menu[1].text = "GO TO MAIN MENU";
+    pause_menu[0].handler = resume_game_option_handler;
+    pause_menu[1].handler = go_to_main_menu_option_handler;
+}
 
 
-
-static void draw_menu(){
-    for(int i = 0; i < 4; i++){
-        if(i == current_option){
-            al_draw_filled_rectangle(main_menu[i].x1, main_menu[i].y1, main_menu[i].x2, main_menu[i].y2, al_map_rgba(255, 255, 255, 0.2));
+static void draw_menu(MENU *menu, int length, int highlight){
+    for(int i = 0; i < length; i++){
+        if(i == highlight){
+            al_draw_filled_rectangle(menu[i].x1, menu[i].y1, menu[i].x2, menu[i].y2, al_map_rgba(255, 255, 255, 0.2));
             al_draw_text(highlighted_option, al_map_rgb(0, 0, 0), SCREEN_WIDTH / 2,
-                    main_menu[i].y1, ALLEGRO_ALIGN_CENTER, main_menu[i].text);
+                    menu[i].y1, ALLEGRO_ALIGN_CENTER, menu[i].text);
             continue;
         }
-        al_draw_text(main_menu[i].font, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
-                main_menu[i].y1, ALLEGRO_ALIGN_CENTER, main_menu[i].text);
+        al_draw_text(menu[i].font, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2,
+                menu[i].y1, ALLEGRO_ALIGN_CENTER, menu[i].text);
     }
 }
 
@@ -150,10 +174,21 @@ static void draw_welcome(){
     al_draw_multiline_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
             0, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "Welcome to Asteroid-Shooter");
 
-    draw_menu();
+    draw_menu(main_menu, 4, current_option);
 }
 
-static void handle_mouse_hover_and_click(ALLEGRO_EVENT *event){
+/*This is going to be used in the main game loop to draw pause menu.*/
+void draw_pause_menu(){
+    al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
+    al_use_transform(&menusystem_transform);
+    al_draw_filled_rectangle(120, 5, 950, 100, al_map_rgba(0, 128, 128, 0.2));
+    al_draw_multiline_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
+            0, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "Asteroid-Shooter");
+    draw_menu(pause_menu, 2, current_option);
+
+}
+
+static void handle_mouse_hover_and_click(ALLEGRO_EVENT *event, MENU *menu, int length){
     int x = 0, y = 0;
     bool clicked = false;
     switch(event->type){
@@ -169,11 +204,11 @@ static void handle_mouse_hover_and_click(ALLEGRO_EVENT *event){
     }
 
     if((x || y)  && draw_helper == 0)
-        for(int i = 0 ; i < 4; i++)
-            if(x > main_menu[i].x1 && x < main_menu[i].x2 && y > main_menu[i].y1 &&  y < main_menu[i].y2){
+        for(int i = 0 ; i < length; i++)
+            if(x > menu[i].x1 && x < menu[i].x2 && y > menu[i].y1 &&  y < menu[i].y2){
                 current_option = i;
                 if(clicked)
-                    main_menu[current_option].handler();
+                    menu[current_option].handler();
             }
 
 }
@@ -229,10 +264,9 @@ void welcome_screen(){
                     else
                         draw_helper = 0;
                 }
-                if(draw_helper == 0){
-                    if(key[ALLEGRO_KEY_ENTER])
-                        main_menu[current_option].handler();
-                }
+
+                if(key[ALLEGRO_KEY_ENTER] && draw_helper == 0)
+                    main_menu[current_option].handler();
                 break;
 
 
@@ -241,7 +275,7 @@ void welcome_screen(){
                 exit(0);
 
         }
-        handle_mouse_hover_and_click(&event);
+        handle_mouse_hover_and_click(&event, main_menu, 4);
         keyboard_update(&event);
         if(done)
             break;
