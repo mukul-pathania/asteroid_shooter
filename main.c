@@ -130,7 +130,7 @@ void game_loop(){
         keyboard_update(&event);
 
         if(menu)
-            handle_mouse_hover_and_click(&event, pause_menu, choice);
+            handle_mouse_hover_and_click(&event, pause_menu, 2, &choice);
 
         if(done)
             break;

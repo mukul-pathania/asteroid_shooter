@@ -199,7 +199,7 @@ void draw_pause_menu(int which_choice){
 
 }
 
-void handle_mouse_hover_and_click(ALLEGRO_EVENT *event, MENU *menu, int length){
+void handle_mouse_hover_and_click(ALLEGRO_EVENT *event, MENU *menu, int length, int *highlight){
     int x = 0, y = 0;
     bool clicked = false;
     switch(event->type){
@@ -214,12 +214,12 @@ void handle_mouse_hover_and_click(ALLEGRO_EVENT *event, MENU *menu, int length){
             break;
     }
 
-    if((x || y)  && draw_helper == 0)
+    if(x || y)
         for(int i = 0 ; i < length; i++)
             if(x > menu[i].x1 && x < menu[i].x2 && y > menu[i].y1 &&  y < menu[i].y2){
-                current_option = i;
+                *highlight = i;
                 if(clicked)
-                    menu[current_option].handler();
+                    menu[*highlight].handler();
             }
 
 }
@@ -282,7 +282,8 @@ void welcome_screen(){
 
         }
 
-        handle_mouse_hover_and_click(&event, main_menu, 4);
+        if(draw_helper == 0)
+            handle_mouse_hover_and_click(&event, main_menu, 4, &current_option);
         keyboard_update(&event);
         
         if(menu_done)

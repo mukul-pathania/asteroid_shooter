@@ -15,6 +15,6 @@ void init_menusystem();
 void destroy_menusystem();
 void welcome_screen();
 void draw_pause_menu();
-void handle_mouse_hover_and_click(ALLEGRO_EVENT* , MENU* , int);
+void handle_mouse_hover_and_click(ALLEGRO_EVENT* , MENU* , int, int*);
 
 #endif //menusystem.h
