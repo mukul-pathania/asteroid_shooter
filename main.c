@@ -77,6 +77,7 @@ void game_loop(){
     
     play_background_music();
     al_identity_transform(&transform);
+    done = false;
     bool redraw = true;
     int choice = 0;
     al_start_timer(timer);
