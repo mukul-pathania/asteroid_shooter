@@ -37,6 +37,7 @@ bool menu = false;
 void init_main(){
     init_input();  //To handle keyboard events
     init_menusystem();
+    audio_init();
     init_asteroids(); //initialise asteroids for use.
     init_ship();   //initialize ship
     init_blasts(); //initialise blasts
@@ -48,14 +49,15 @@ void init_main(){
 
 /*This function is going to be super-useful in other files.*/
 void destroy_main(){
-    al_destroy_display(disp);
     destroy_audio();
     destroy_ship();
     destroy_asteroids();
     destroy_FX();
     destroy_bgspace();
-    destroy_menusystem();
     destroy_blasts();
+    destroy_menusystem();
+    al_destroy_display(disp);
+    exit(0);
 }
 
 void game_loop(){
@@ -69,7 +71,6 @@ void game_loop(){
     font = al_create_builtin_font();
     must_init(font, "font");
 
-    must_init(al_install_mouse(), "Mouse in game loop"); 
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(disp));
     al_register_event_source(queue, al_get_timer_event_source(timer));
@@ -80,6 +81,7 @@ void game_loop(){
     done = false;
     bool redraw = true;
     int choice = 0;
+    bool display_closed = false;
     al_start_timer(timer);
     
     while(1){
@@ -123,6 +125,7 @@ void game_loop(){
                 break;
 
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                display_closed = true;
                 done = true;
                 break;
         }
@@ -161,6 +164,10 @@ void game_loop(){
     al_destroy_font(font);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
+
+    /*If the display is closed while in game loop then destroy main should be called here*/
+    if(display_closed)
+        destroy_main();
     return;
 
 }
@@ -180,10 +187,8 @@ int main(){
     disp = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
     must_init(disp, "display");
 
-
     must_init(al_init_primitives_addon(), "primitives");
     must_init(al_init_image_addon(), "image-addon");
-    audio_init();
 
     init_main();
 

@@ -26,7 +26,6 @@ static void draw_credits();
 int current_option = 0;
 int draw_helper = 0;
 bool menu_done = false;//keep it here start_game_option_handler uses it.
-
 void (*draw[3])();//array of function pointers used in the drawing of menu.
 
 
@@ -58,11 +57,16 @@ void init_menusystem(){
 static void start_game_option_handler(){
     stop_menu_music();
     al_stop_timer(menu_timer);
-    al_flush_event_queue(menu_queue);
     game_loop();
+    current_option = -2; //disable any chosen option
+    draw_helper = 0; //draw the main menu
     al_start_timer(menu_timer);
+    al_flush_event_queue(menu_queue);
     play_menu_music();
+    return;
 }
+
+
 /*Couldn't think of a name.*/
 static void controls_option_handler(){
     draw_helper = 1;
@@ -71,13 +75,9 @@ static void credits_option_handler(){
     draw_helper = 2;
 }
 static void exit_option_handler(){
-    al_destroy_timer(menu_timer);
-    al_destroy_event_queue(menu_queue);
-    stop_menu_music();
-    destroy_main();
-    exit(0);
-
+    menu_done = true;
 }
+
 static void draw_credits(){
     al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
     al_use_transform(&menusystem_transform);
@@ -108,6 +108,7 @@ static void draw_credits(){
             SCREEN_WIDTH, 60, ALLEGRO_ALIGN_CENTER, "STAY AT HOME AND STAY SAFE DURING THESE"
             " TESTING TIMES OF CORONA.");
 }
+
 static void draw_controls(){
 }
 
@@ -141,6 +142,7 @@ static void init_main_menu(){
 }
 
 MENU pause_menu[2];
+
 static void resume_game_option_handler(){
     menu = false;
 }
@@ -240,6 +242,7 @@ void welcome_screen(){
     bool redraw = true;
     ALLEGRO_EVENT event;
     play_menu_music();
+    current_option = -2;
 
     al_start_timer(menu_timer);
     while(1)
@@ -261,29 +264,30 @@ void welcome_screen(){
                 if(key[ALLEGRO_KEY_UP])
                     current_option--;
 
-                if(current_option > 3)
+                /*current_option has value -2 when no option is chosen*/
+                if(current_option != -2 && current_option > 3)
                     current_option = 0;
 
-                if(current_option < 0)
+                if(current_option != -2 && current_option < 0)
                     current_option = 3;
 
                 if(key[ALLEGRO_KEY_ESCAPE])
                     draw_helper = 0;
                 
 
-                if(key[ALLEGRO_KEY_ENTER] && draw_helper == 0)
+                if(current_option >= 0  && key[ALLEGRO_KEY_ENTER] && draw_helper == 0)
                     main_menu[current_option].handler();
                 break;
 
 
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                destroy_main();
-                exit(0);
+                menu_done = true;
 
         }
 
         if(draw_helper == 0)
             handle_mouse_hover_and_click(&event, main_menu, 4, &current_option);
+        
         keyboard_update(&event);
         
         if(menu_done)
@@ -301,4 +305,5 @@ void welcome_screen(){
     al_destroy_timer(menu_timer);
     al_destroy_event_queue(menu_queue);
     stop_menu_music();
+    return;
 }
