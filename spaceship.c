@@ -60,6 +60,7 @@ void init_ship(){
     ship->circle.y = ship->y;
     ship->circle.radius = 5*ship->scale;
     ship->health = 100;
+    ship->draw_trail = false;
     ship->is_drifting = false;
 
 
@@ -79,7 +80,7 @@ void draw_ship(SPACESHIP *ship){
     al_use_transform(&ship_transform);
 
     al_draw_bitmap(SHIP, -12/2, -13/2, 0);
-    if(key[ALLEGRO_KEY_UP]){
+    if(ship->draw_trail){
         al_draw_bitmap(TRAILS[rand() % 5], -9, 13/2, 0);
     }
 }
@@ -131,6 +132,7 @@ void ship_update(SPACESHIP *ship){
             ship->speed = 0;
     }
     if(key[ALLEGRO_KEY_UP]){
+        ship->draw_trail = true;
         if(ship->speed == 0)
             ship->speed = 1;
         ship->speed *= SPACESHIP_ACC_GRADIENT;
@@ -144,6 +146,7 @@ void ship_update(SPACESHIP *ship){
     //if the ship is not acclerating.
     else{
         sound_interval = 0;
+        ship->draw_trail = false;
         al_stop_sample(&trail_id);
     }
 

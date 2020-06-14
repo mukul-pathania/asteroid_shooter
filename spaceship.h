@@ -12,6 +12,7 @@ extern ALLEGRO_BITMAP *SPRITESHEET, *SHIP, *TRAIL, *TRAILS[5];
 typedef struct{
     float x, y, speed, heading, scale;
     bool is_drifting;
+    bool draw_trail;
     int health;
     int lives;
     int respawn_timer;
