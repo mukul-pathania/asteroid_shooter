@@ -17,6 +17,7 @@ extern bool done, menu;
 
 void destroy_main();
 void game_loop();
+void reload_ship();
 void must_init(bool, const char*);
 
 #endif //main.h

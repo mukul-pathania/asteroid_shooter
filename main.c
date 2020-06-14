@@ -60,6 +60,15 @@ void destroy_main(){
     exit(0);
 }
 
+/*This function is to initialise the spaceship again when the user uses the
+ *START GAME option.
+ */
+void reload_ship(){
+    destroy_ship();
+    init_ship();
+
+}
+
 void game_loop(){
     
     timer = al_create_timer(1.0 / 30.0);

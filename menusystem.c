@@ -58,6 +58,9 @@ static void start_game_option_handler(){
     stop_menu_music();
     al_stop_timer(menu_timer);
     game_loop();
+    reload_ship();
+    //Reload the ship for the case when user chooses the START GAME
+    //option again
     current_option = -2; //disable any chosen option
     draw_helper = 0; //draw the main menu
     al_start_timer(menu_timer);
