@@ -140,29 +140,35 @@ static void draw_controls(){
     al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 130,
             ALLEGRO_ALIGN_LEFT, "ACCELERATE THE SHIP");
 
-    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 230,
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 210,
             ALLEGRO_ALIGN_LEFT, "DOWN ARROW KEY");
 
-    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 230,
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 210,
             ALLEGRO_ALIGN_LEFT, "DECELERATE THE SHIP");
 
-    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 330,
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 290,
             ALLEGRO_ALIGN_LEFT, "LEFT ARROW KEY");
 
-    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 330,
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 290,
             ALLEGRO_ALIGN_LEFT, "ROTATE TOWARDS LEFT");
 
-    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 430,
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 370,
             ALLEGRO_ALIGN_LEFT, "RIGHT ARROW KEY");
 
-    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 430,
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 370,
             ALLEGRO_ALIGN_LEFT, "ROTATE TOWARDS RIGHT");
     
-    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 530,
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 450,
             ALLEGRO_ALIGN_LEFT, "SPACE BAR");
 
-    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 530,
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 450,
             ALLEGRO_ALIGN_LEFT, "LAUNCH LASER BLASTS");
+    
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 530,
+            ALLEGRO_ALIGN_LEFT, "ESCAPE KEY");
+
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 530,
+            ALLEGRO_ALIGN_LEFT, "SEE MENU // PAUSE GAME");
 }
 
 
