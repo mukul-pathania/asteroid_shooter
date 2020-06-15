@@ -17,12 +17,19 @@ ALLEGRO_FONT *heading, *options, *highlighted_option, *medium_scale, *small_scal
 ALLEGRO_TRANSFORM menusystem_transform;
 ALLEGRO_TIMER *menu_timer;
 ALLEGRO_EVENT_QUEUE *menu_queue;
+ALLEGRO_USTR *player1_name, *player2_name;
+int player1_cur, player2_cur;
+
+
 static void init_main_menu();
 static void init_pause_menu();
 static void draw_menu(MENU*, int, int);
 static void draw_welcome();
 static void draw_controls();
 static void draw_credits();
+static void init_get_username();
+static void get_username(char*, ALLEGRO_USTR*, int*);
+
 int current_option = 0;
 int draw_helper = 0;
 bool menu_done = false;//keep it here start_game_option_handler uses it.
@@ -44,19 +51,25 @@ void init_menusystem(){
     must_init(medium_scale, "Medium sized font");
     small_scale = al_load_ttf_font("resources/SEASRN__.ttf", 25, 0);
     must_init(small_scale, "Small sized font");
-    
+
     draw[0] = draw_welcome;
     draw[1] = draw_controls;
     draw[2] = draw_credits;
 
     init_main_menu();
     init_pause_menu();
+    init_get_username();
 }
 
 
+
+
+
 static void start_game_option_handler(){
-    stop_menu_music();
     al_stop_timer(menu_timer);
+    get_username("ENTER THE NAME FOR PLAYER 1:", player1_name, &player1_cur);
+    //get_username("ENTER THE NAME FOR PLAYER 2:", player2_name, &player2_cur); 
+    stop_menu_music();
     game_loop();
     reload_ship();
     //Reload the ship for the case when user chooses the START GAME
@@ -85,22 +98,22 @@ static void draw_credits(){
     al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
     al_use_transform(&menusystem_transform);
     al_draw_filled_rectangle(390, 5, 700, 100, al_map_rgba(0, 128, 128, 0.2));
-    
+
     al_draw_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2, 0,
             ALLEGRO_ALIGN_CENTER, "CREDITS");
-    
+
     al_draw_text(medium_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 130,
             ALLEGRO_ALIGN_CENTER, "DEVELEOPED BY:");
-    
+
     al_draw_text(small_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 180,
             ALLEGRO_ALIGN_CENTER, "MUKUL PATHANIA");
-    
+
     al_draw_text(medium_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 250,
             ALLEGRO_ALIGN_CENTER, "CONTRIBUTORS:");
-    
+
     al_draw_text(small_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 300,
             ALLEGRO_ALIGN_CENTER, "SHUBHAM WAWALE AND ROHIT PATIL");
-    
+
     al_draw_text(medium_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 370,
             ALLEGRO_ALIGN_CENTER, "MUSIC TRACKS:");
 
@@ -122,6 +135,8 @@ void destroy_menusystem(){
     al_destroy_font(highlighted_option);
     al_destroy_font(medium_scale);
     al_destroy_font(small_scale);
+    al_ustr_free(player1_name);
+    al_ustr_free(player2_name);
 }
 
 
@@ -276,7 +291,7 @@ void welcome_screen(){
 
                 if(key[ALLEGRO_KEY_ESCAPE])
                     draw_helper = 0;
-                
+
 
                 if(current_option >= 0  && key[ALLEGRO_KEY_ENTER] && draw_helper == 0)
                     main_menu[current_option].handler();
@@ -290,9 +305,9 @@ void welcome_screen(){
 
         if(draw_helper == 0)
             handle_mouse_hover_and_click(&event, main_menu, 4, &current_option);
-        
+
         keyboard_update(&event);
-        
+
         if(menu_done)
             break;
 
@@ -310,3 +325,74 @@ void welcome_screen(){
     stop_menu_music();
     return;
 }
+
+/*Initialise the variables with default values*/
+static void init_get_username(){
+    player1_name = al_ustr_new("PLAYER1");
+    must_init(player1_name, "Name of player1");
+    player2_name = al_ustr_new("PLAYER2");
+    must_init(player2_name, "Name of player2");
+    player1_cur = (int)al_ustr_size(player1_name);
+    player2_cur = (int)al_ustr_size(player2_name);
+}
+
+/*This function will ask the users to type in their names*/
+static void get_username(char *message, ALLEGRO_USTR* str, int *cur_position){
+
+    ALLEGRO_EVENT_QUEUE* username_queue = al_create_event_queue();
+    al_register_event_source(username_queue, al_get_keyboard_event_source());
+    al_register_event_source(username_queue, al_get_display_event_source(disp));
+
+    bool quit = false;
+    while(!quit)
+    {
+
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        draw_bgspace();
+        draw_all_asteroids();
+        al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
+        al_use_transform(&menusystem_transform);
+        al_draw_multiline_text(medium_scale, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
+                200, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, message);
+
+        al_draw_ustr(small_scale, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, 300, 
+                ALLEGRO_ALIGN_CENTRE, str);
+
+        al_flip_display();
+
+        ALLEGRO_EVENT event;
+        al_wait_for_event(username_queue, &event);
+        switch(event.type)
+        {
+            case ALLEGRO_EVENT_DISPLAY_CLOSE: 
+                destroy_main();
+                break;
+
+            case ALLEGRO_EVENT_KEY_CHAR:
+                if(event.keyboard.unichar >= 32)
+                {
+                    *cur_position += al_ustr_append_chr(str, event.keyboard.unichar);
+                }
+
+                else if(event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE)
+                {
+                    if(al_ustr_prev(str, cur_position))
+                        al_ustr_truncate(str, *cur_position);
+                }
+
+                else if(event.keyboard.keycode == ALLEGRO_KEY_ENTER){
+                    quit = true;
+                }
+
+                break;
+        }
+    }
+
+    al_destroy_event_queue(username_queue);
+    return;
+}
+
+
+
+

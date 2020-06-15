@@ -35,8 +35,8 @@ bool menu = false;
 
 /*This function calls all the init functions.*/
 void init_main(){
-    init_input();  //To handle keyboard events
     init_menusystem();
+    init_input();  //To handle keyboard events
     audio_init();
     init_asteroids(); //initialise asteroids for use.
     init_ship();   //initialize ship
@@ -90,6 +90,7 @@ void game_loop(){
     done = false;
     bool redraw = true;
     int choice = 0;
+    menu = false;
     bool display_closed = false;
     al_start_timer(timer);
     
