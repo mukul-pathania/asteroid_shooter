@@ -126,6 +126,42 @@ static void draw_credits(){
 }
 
 static void draw_controls(){
+    al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
+    al_use_transform(&menusystem_transform);
+    al_draw_filled_rectangle(300, 5, 780, 100, al_map_rgba(0, 128, 128, 0.2));
+
+    al_draw_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2, 0,
+            ALLEGRO_ALIGN_CENTER, "CONTROLS");
+
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 130,
+            ALLEGRO_ALIGN_LEFT, "UP ARROW KEY");
+
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 130,
+            ALLEGRO_ALIGN_LEFT, "ACCELERATE THE SHIP");
+
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 230,
+            ALLEGRO_ALIGN_LEFT, "DOWN ARROW KEY");
+
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 230,
+            ALLEGRO_ALIGN_LEFT, "DECELERATE THE SHIP");
+
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 330,
+            ALLEGRO_ALIGN_LEFT, "LEFT ARROW KEY");
+
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 330,
+            ALLEGRO_ALIGN_LEFT, "ROTATE TOWARDS LEFT");
+
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 430,
+            ALLEGRO_ALIGN_LEFT, "RIGHT ARROW KEY");
+
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 430,
+            ALLEGRO_ALIGN_LEFT, "ROTATE TOWARDS RIGHT");
+    
+    al_draw_text(medium_scale, al_map_rgb(255, 255, 0), 10, 530,
+            ALLEGRO_ALIGN_LEFT, "SPACE BAR");
+
+    al_draw_text(medium_scale, al_map_rgb(0, 128, 128), SCREEN_WIDTH / 2, 530,
+            ALLEGRO_ALIGN_LEFT, "LAUNCH LASER BLASTS");
 }
 
 

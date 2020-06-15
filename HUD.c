@@ -22,7 +22,7 @@ long long int get_points(){
 }
 
 void init_HUD(){
-    hud_font = al_load_ttf_font("resources/SEASRN__.ttf", 15, 0);
+    hud_font = al_load_ttf_font("resources/SEASRN__.ttf", 19, 0);
     must_init(hud_font, "HUD font");
     newtime = oldtime = 0;
     lives_count = ship->lives;
