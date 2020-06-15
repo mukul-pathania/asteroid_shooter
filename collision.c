@@ -63,7 +63,7 @@ int check_and_handle_collisions(){
         {
 
             if(is_colliding(&asteroids[i].circle, &ship->circle)){
-                ship->health = 0;
+                ship->health -= 40 * asteroids[i].scale;
                 FX_add(false, ship->x, ship->y, 1);
                 FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
                 asteroids[i].gone = true;
