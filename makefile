@@ -1,10 +1,10 @@
-objects = main.o asteroid.o spaceship.o input.o blast.o sounds.o collision.o bgspace.o FX.o menusystem.o
+objects = main.o asteroid.o spaceship.o input.o blast.o sounds.o collision.o bgspace.o FX.o menusystem.o HUD.o
 allegro = `pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5  allegro_ttf-5 --libs --cflags` 
 
 main: $(objects)
 	gcc $(objects) -o main $(allegro) -lm
 
-main.o: main.h asteroid.h spaceship.h input.h blast.h FX.h sounds.h bgspace.h menusystem.h
+main.o: main.h asteroid.h spaceship.h input.h blast.h FX.h sounds.h bgspace.h menusystem.h HUD.h
 asteroid.o: asteroid.h  main.h collision.h
 spaceship.o: main.h spaceship.h input.h collision.h sounds.h
 input.o: input.h
@@ -14,6 +14,7 @@ bgspace.o: bgspace.h main.h asteroid.h
 collision.o: collision.h asteroid.h blast.h FX.h sounds.h spaceship.h 
 FX.o: FX.h
 menusystem.o: menusystem.h main.h bgspace.h input.h sounds.h 
+HUD.o: HUD.h main.h menusystem.h spaceship.h
 
 .PHONY: clean
 clean:
