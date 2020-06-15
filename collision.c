@@ -7,6 +7,7 @@
 #include "sounds.h"
 #include "spaceship.h"
 #include "asteroid.h"
+#include "HUD.h"
 
 /*Two circles are provided to this function and it returns true if
  *they collide and false otherwise.*/
@@ -37,12 +38,16 @@ int check_and_handle_collisions(){
             //check for collision between the asteroid and the blast.
             if(is_colliding(&blasts[j].circle, &asteroids[i].circle)){
                 asteroids[i].life--;
+                //increase the points according to size of asteroid.
+                add_points(10 * asteroids[i].scale);
                 play_exp1sound();
                 if(asteroids[i].life){
                     play_exp1sound(); 
                     FX_add(true, blasts[j].x, blasts[j].y, 1);
                 }
                 else{
+                    //If the asteroid is destroyed then add many more points.
+                    add_points(100 * asteroids[i].scale);
                     FX_add(false, asteroids[i].x, asteroids[i].y, asteroids[i].scale);
                     play_exp2sound();
                 }
