@@ -1,6 +1,8 @@
-#ifndef FILE_HUD_SEEN
-#define FILE_HUD_SEEN 1
+#ifndef FILE_MENUSYSTEM_SEEN
+#define FILE_MENUSYSTEM_SEEN 1
 
+#include <allegro5/allegro5.h>
+#include <allegro5/allegro_font.h>
 
 typedef struct{
     float x1, y1, x2, y2;
@@ -11,6 +13,7 @@ typedef struct{
 
 extern MENU main_menu[4];
 extern MENU pause_menu[2];
+extern ALLEGRO_USTR *player1_name, *player2_name;
 void init_menusystem();
 void destroy_menusystem();
 void welcome_screen();

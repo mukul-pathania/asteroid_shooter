@@ -1,18 +1,19 @@
+#include "main.h"
 #include "FX.h"
 #include "input.h"
 #include "blast.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "spaceship.h"
+#include "sounds.h"
+#include "bgspace.h"
+#include "asteroid.h"
+#include "menusystem.h"
+#include "HUD.h"
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
-#include "spaceship.h"
-#include "sounds.h"
-#include "bgspace.h"
-#include "menusystem.h"
-#include "asteroid.h"
-#include "main.h"
 #include <time.h>
 
 void must_init(bool test, const char *description)
@@ -23,12 +24,12 @@ void must_init(bool test, const char *description)
     exit(1);
 }
 
+
 ALLEGRO_TIMER* timer;
 ALLEGRO_EVENT_QUEUE* queue;
 ALLEGRO_DISPLAY* disp;
 ALLEGRO_FONT* font;
 ALLEGRO_EVENT event;
-ALLEGRO_TRANSFORM transform;
 bool done = false;
 bool menu = false;
 
@@ -43,7 +44,7 @@ void init_main(){
     init_blasts(); //initialise blasts
     FX_init();
     init_bgspace();//initialise all the background elements.
-    
+    init_HUD(); 
 }
 
 
@@ -86,7 +87,6 @@ void game_loop(){
     al_register_event_source(queue, al_get_mouse_event_source());
     
     play_background_music();
-    al_identity_transform(&transform);
     done = false;
     bool redraw = true;
     int choice = 0;
@@ -131,6 +131,7 @@ void game_loop(){
                 update_blasts();  //update the blasts on the screen.
                 FX_update();
                 trigger_bgspace();
+                update_HUD();
 
                 break;
 
@@ -150,9 +151,6 @@ void game_loop(){
 
         if(redraw && al_is_event_queue_empty(queue)){
             al_clear_to_color(al_map_rgb(0, 0, 0));
-            al_translate_transform(&transform, 0, 0);
-            al_use_transform(&transform);
-            al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Asteroids: %3d", asteroid_count);
             draw_bgspace();
             FX_draw();
 
@@ -161,6 +159,7 @@ void game_loop(){
             draw_ship(ship); // draws spaceship
 
             draw_all_blasts(); //draws all the blasts
+            draw_HUD();
             
             if(menu)
                 draw_pause_menu(choice);
