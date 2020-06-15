@@ -11,6 +11,10 @@ typedef struct{
     void (*handler)();
 }MENU;
 
+//For sharing fonts to other files
+extern ALLEGRO_FONT *heading, *options, *highlighted_option;
+extern ALLEGRO_FONT *medium_scale, *small_scale;
+
 extern MENU main_menu[4];
 extern MENU pause_menu[2];
 extern ALLEGRO_USTR *player1_name, *player2_name;

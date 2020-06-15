@@ -13,7 +13,8 @@
 #include "asteroid.h"
 #include "main.h"
 
-ALLEGRO_FONT *heading, *options, *highlighted_option, *medium_scale, *small_scale;
+ALLEGRO_FONT *heading, *options, *highlighted_option;
+ALLEGRO_FONT *medium_scale, *small_scale;
 ALLEGRO_TRANSFORM menusystem_transform;
 ALLEGRO_TIMER *menu_timer;
 ALLEGRO_EVENT_QUEUE *menu_queue;
@@ -97,7 +98,7 @@ static void exit_option_handler(){
 static void draw_credits(){
     al_build_transform(&menusystem_transform, 0, 0, 1, 1, 0);
     al_use_transform(&menusystem_transform);
-    al_draw_filled_rectangle(390, 5, 700, 100, al_map_rgba(0, 128, 128, 0.2));
+    al_draw_filled_rectangle(390, 5, 690, 100, al_map_rgba(0, 128, 128, 0.2));
 
     al_draw_text(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2, 0,
             ALLEGRO_ALIGN_CENTER, "CREDITS");

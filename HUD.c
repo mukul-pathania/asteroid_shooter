@@ -2,7 +2,9 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_primitives.h>
 #include "spaceship.h"
+#include "menusystem.h"
 #include "HUD.h"
 
 long long int points = 0, points_HUD = 0;
@@ -64,23 +66,42 @@ void update_HUD(){
 
 }
 
+
+static void draw_gameover(){
+    al_draw_filled_rectangle(270, SCREEN_HEIGHT / 4, 820, SCREEN_HEIGHT * 3 / 4 + 20, 
+            al_map_rgba(0, 128, 128, 0.2));
+    al_draw_multiline_textf(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
+            SCREEN_HEIGHT / 4, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "GAME OVER\n\n"
+            "YOU SCORED\n%d POINTS.", points);
+}
+
 void draw_HUD(){
-    
+
     al_build_transform(&HUD_TRANSFORM, 0, 0, 1, 1, 0);
     al_use_transform(&HUD_TRANSFORM);
 
+    //If the pause menu is activated then stop displaying the HUD. 
+    if(menu)
+        return;
+
+    //If the ship has no more lives left then display game over.
+    if(ship->lives < 0){
+        draw_gameover();
+        return;
+    }
+
     al_draw_textf(hud_font, al_map_rgb(255, 255, 255), SCREEN_WIDTH, 0, 
             ALLEGRO_ALIGN_RIGHT, "FPS:  %d", FPS);
-    
+
     al_draw_ustr(hud_font, al_map_rgb(255, 255, 255), 0, 0,
             ALLEGRO_ALIGN_LEFT, player1_name);
-    
+
     al_draw_textf(hud_font, lives_color, SCREEN_WIDTH, 20, 
             ALLEGRO_ALIGN_RIGHT, "Lives left:  %d", lives_count);
-    
+
     al_draw_textf(hud_font, health_color, 0, 20, 
             ALLEGRO_ALIGN_LEFT, "Health:  %d", health_count);
-    
+
     al_draw_textf(hud_font, al_map_rgb(255, 255, 255), 0, 40, 
             ALLEGRO_ALIGN_LEFT, "Points:  %lld", points_HUD);
 
