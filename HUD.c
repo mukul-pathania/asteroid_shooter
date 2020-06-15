@@ -5,7 +5,7 @@
 #include "spaceship.h"
 #include "HUD.h"
 
-long long int points = 0;
+long long int points = 0, points_HUD = 0;
 ALLEGRO_TRANSFORM HUD_TRANSFORM; 
 ALLEGRO_FONT *hud_font;
 ALLEGRO_COLOR health_color, lives_color;
@@ -32,6 +32,16 @@ void init_HUD(){
 }
 
 void update_HUD(){
+    
+    //We don't want to update the score immediately we want the score to keep rolling
+    //as it will look better
+    long long diff = 0;
+    for(int i = 5; i > 0; i--){
+        diff = 1 << i;
+        if(points_HUD <= (points - diff))
+            points_HUD += diff;
+    }
+
     newtime = al_get_time();
     diff_time = newtime - oldtime;
     FPS = (1 / (diff_time * 1000)) * 1000;
@@ -72,6 +82,6 @@ void draw_HUD(){
             ALLEGRO_ALIGN_LEFT, "Health:  %d", health_count);
     
     al_draw_textf(hud_font, al_map_rgb(255, 255, 255), 0, 40, 
-            ALLEGRO_ALIGN_LEFT, "Points:  %lld", points);
+            ALLEGRO_ALIGN_LEFT, "Points:  %lld", points_HUD);
 
 }
