@@ -55,8 +55,13 @@ void update_HUD(){
     oldtime = newtime;
     if(ship->lives != lives_count){
         lives_count = ship->lives;
-        //lives will show up in yellow or red according to this.
-        lives_color = (lives_count <= 1) ? (al_map_rgb(255, 0, 0)) : al_map_rgb(255, 255, 0);
+        //lives will show up in green or yellow or red according to this.
+        if(lives_count >= 3)
+            lives_color = al_map_rgb(0, 255 ,0);
+        else if(lives_count > 0)
+            lives_color = al_map_rgb(255, 255, 0);
+        else
+            lives_color = al_map_rgb(255, 0 ,0);
     }
     
     if(ship->health != health_count){
