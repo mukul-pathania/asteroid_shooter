@@ -73,11 +73,11 @@ void update_HUD(){
 
 
 static void draw_gameover(){
-    al_draw_filled_rectangle(270, SCREEN_HEIGHT / 4, 820, SCREEN_HEIGHT * 3 / 4 + 20, 
+    al_draw_filled_rectangle(270, SCREEN_HEIGHT / 4, 820, SCREEN_HEIGHT * 3 / 4 + 100, 
             al_map_rgba(0, 128, 128, 0.2));
     al_draw_multiline_textf(heading, al_map_rgb(255, 255, 0), SCREEN_WIDTH / 2,
-            SCREEN_HEIGHT / 4, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "GAME OVER\n\n"
-            "YOU SCORED\n%d POINTS.", points);
+            SCREEN_HEIGHT / 4, SCREEN_WIDTH, 80, ALLEGRO_ALIGN_CENTER, "GAME OVER!!\n\n"
+            "YOU SCORED\n%d\nPOINTS.", points);
 }
 
 void draw_HUD(){
