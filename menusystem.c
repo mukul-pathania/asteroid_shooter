@@ -11,6 +11,7 @@
 #include "input.h"
 #include "sounds.h"
 #include "asteroid.h"
+#include "HUD.h"
 #include "main.h"
 
 ALLEGRO_FONT *heading, *options, *highlighted_option;
@@ -68,10 +69,11 @@ void init_menusystem(){
 
 static void start_game_option_handler(){
     al_stop_timer(menu_timer);
-    get_username("ENTER THE NAME FOR PLAYER 1:", player1_name, &player1_cur);
+    get_username("ENTER THE NAME FOR PLAYER :", player1_name, &player1_cur);
     //get_username("ENTER THE NAME FOR PLAYER 2:", player2_name, &player2_cur); 
     stop_menu_music();
     game_loop();
+    add_points(-get_points());//set the points back to zero.
     reload_ship();
     //Reload the ship for the case when user chooses the START GAME
     //option again
@@ -371,7 +373,7 @@ void welcome_screen(){
 
 /*Initialise the variables with default values*/
 static void init_get_username(){
-    player1_name = al_ustr_new("PLAYER1");
+    player1_name = al_ustr_new("PLAYER");
     must_init(player1_name, "Name of player1");
     player2_name = al_ustr_new("PLAYER2");
     must_init(player2_name, "Name of player2");

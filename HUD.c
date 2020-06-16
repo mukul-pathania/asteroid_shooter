@@ -34,9 +34,14 @@ void init_HUD(){
 }
 
 void update_HUD(){
+   
+   //This is needed when the game restarts using the menu 
+    if(points == 0)
+        points_HUD = 0;
     
     //We don't want to update the score immediately we want the score to keep rolling
     //as it will look better
+
     long long diff = 0;
     for(int i = 5; i > 0; i--){
         diff = 1 << i;

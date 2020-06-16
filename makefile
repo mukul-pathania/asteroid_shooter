@@ -13,7 +13,7 @@ sounds.o: sounds.h input.h
 bgspace.o: bgspace.h main.h asteroid.h
 collision.o: collision.h asteroid.h blast.h FX.h sounds.h spaceship.h HUD.h 
 FX.o: FX.h
-menusystem.o: menusystem.h main.h bgspace.h input.h sounds.h 
+menusystem.o: menusystem.h main.h bgspace.h input.h sounds.h HUD.h 
 HUD.o: HUD.h main.h menusystem.h spaceship.h
 
 .PHONY: clean
