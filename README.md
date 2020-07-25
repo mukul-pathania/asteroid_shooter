@@ -18,5 +18,5 @@ Upon completion of this project you could expect these links to get you a copy o
 
 [allegro]: https://liballeg.org/
 [Cmake]: https://cmake.org/
-[Linux]: #
-[Windows]: #
+[Linux]: https://github.com/mukulpathania96/asteroid_shooter/releases/download/v1.0-beta/asteroid-shooter_1.0.0-beta-1_amd64.deb
+[Windows]: https://github.com/mukulpathania96/asteroid_shooter/releases/download/v1.0-beta/asteroid-shooter.msi
